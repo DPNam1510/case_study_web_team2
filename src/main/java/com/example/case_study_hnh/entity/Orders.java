@@ -7,7 +7,6 @@ public class Orders {
     private int customerId;
     private int payTypeId;
     private LocalDate dateTime;
-    private List<OrdersDetail> orderDetails;
 
     public Orders() {}
 
@@ -50,11 +49,4 @@ public class Orders {
         this.dateTime = dateTime;
     }
 
-    public List<OrdersDetail> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrdersDetail> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
 }
