@@ -17,5 +17,9 @@
 <br/>
 <a href="hello-servlet">Hello Team 2</a>
 <c:redirect url="/view/home.jsp"/>
+<h1><%= "Hello World!" %>
+</h1>
+<br/>
+<a href="hello-servlet">Hello Team 2</a>
 </body>
 </html>
