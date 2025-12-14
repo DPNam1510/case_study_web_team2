@@ -1,0 +1,239 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial;
+}
+
+/* HEADER */
+header {
+    background-color: #0aa7e8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    color: white;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    color: #003d73;
+}
+
+.login-btn {
+    background: white;
+    padding: 7px 12px;
+    border-radius: 10px;
+    color: #0aa7e8 !important;
+}
+/* ================= DROPDOWN ================ */
+.dropdown {
+    position: relative;
+}
+
+.dropdown > a {
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;    /* nằm ngay dưới chữ Dịch vụ */
+    left: 0;
+    background: white;
+    padding: 10px 0;
+    border-radius: 8px;
+    min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: none;    /* Ẩn mặc định */
+    z-index: 9999;
+}
+
+/* Hover vào .dropdown → hiện menu */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 10px 15px;
+    white-space: nowrap;
+}
+
+.dropdown-menu li:hover {
+    background: #f0f0f0;
+}
+
+.dropdown-menu li a {
+    color: #000 !important;
+    font-weight: bold;
+}
+
+
+/* HERO */
+.hero {
+    background: url("https://images.pexels.com/photos/6129157/pexels-photo-6129157.jpeg") center/cover no-repeat;
+    height: 65vh;
+    display: flex;
+    align-items: center;
+    padding-left: 80px;
+    color: white;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+}
+
+.hero-content p {
+    margin: 15px 0;
+    font-size: 20px;
+}
+
+.btn {
+    background: #0aa7e8;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+/* SERVICES */
+.services {
+    text-align: center;
+    padding: 50px;
+}
+
+.service-box {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.service-item {
+    background: #f3f3f3;
+    width: 30%;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+/* FOOTER */
+footer {
+    background: #0aa7e8;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+/* HEADER thu nhỏ */
+header.shrink {
+    padding: 6px 40px;
+    background-color: #088ac4;
+    transition: 0.3s;
+}
+
+/* Menu mobile */
+.menu-btn {
+    display: none;
+    cursor: pointer;
+    font-size: 28px;
+}
+
+nav ul.active {
+    display: block;
+}
+
+/* Back to top button */
+#back-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #0aa7e8;
+    color: white;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    font-size: 18px;
+}
+
+#back-top-btn.show {
+    display: block;
+}
+
+/* Fade-in animation */
+.fade {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.6s;
+}
+
+.fade.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive nav */
+@media (max-width: 768px) {
+    nav ul {
+        display: none;
+        flex-direction: column;
+        background: #0aa7e8;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    nav ul li {
+        margin-bottom: 10px;
+    }
+}
+.appointment-form {
+    max-width: 400px;
+    margin: 20px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+
+.appointment-form label {
+    font-weight: bold;
+}
+
+.appointment-form input,
+.appointment-form select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#appointment-result {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+
+
