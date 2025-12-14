@@ -8,7 +8,8 @@ public class Account {
     private LocalDate dateCreate;
     private String role;
 
-    public Account() {}
+    public Account() {
+    }
 
     public Account(String username, String password, LocalDate dateCreate, String role) {
         this.username = username;
