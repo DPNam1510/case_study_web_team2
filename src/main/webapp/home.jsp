@@ -1,9 +1,17 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: dpnbh
+  Date: 14/12/2025
+  Time: 3:18 CH
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title> HOSPITAL</title>
-    <link rel="stylesheet" href="view/layout/home.css">
+    <title>HOSPITAL</title>
+    <c:import url="./layout/library.jsp"/>
+<%--    <link rel="stylesheet" href="assets/css/home.css">--%>
 </head>
 <body>
 <%--header--%>
@@ -54,6 +62,6 @@
     <p>Địa chỉ: Tam Kỳ - Quảng Nam</p>
     <p>Hotline: 0123 456 789</p>
 </footer>
-
+<%--<script src="assets/js/home.js"></script>--%>
 </body>
 </html>
