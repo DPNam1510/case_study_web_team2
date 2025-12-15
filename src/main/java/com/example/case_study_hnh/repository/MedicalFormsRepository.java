@@ -10,10 +10,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MedicalFormsRepository implements IMedicalFormsRepository {
+    private final String FIND_ALL = "select * from medical_forms";
     private final String INSERT = "INSERT INTO medical_forms(customer_id, date_time, appointment_time, status) VALUES (?, ?, ?, ?)";
     private final String FIND_BY_ID = "SELECT * FROM medical_forms WHERE customer_id = ?";
     private final String DELETE_BY_ID = "DELETE FROM medical_forms WHERE id = ?";
 
+    @Override
+    public List<MedicalForms> findAll(){
+        List<MedicalForms> medicalFormsList = new ArrayList<>();
+        try(Connection connection = ConnectDB.getConnectDB();) {
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int customerId = resultSet.getInt("customer_id");
+                LocalDate dateTime = resultSet.getDate("date_time").toLocalDate();
+                LocalDateTime appointmentTime = resultSet.getTimestamp("appointment_time").toLocalDateTime();
+                String status = resultSet.getString("status");
+                MedicalForms medicalForms = new MedicalForms(id,customerId,dateTime,appointmentTime,status);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return medicalFormsList;
+    }
     @Override
     public boolean add(MedicalForms medicalForms) {
         try (Connection connection = ConnectDB.getConnectDB()) {
