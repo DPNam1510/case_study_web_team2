@@ -38,7 +38,7 @@
         </c:if>
 
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="********">
+        <input type="password" id="password" name="password" placeholder="********"/>
         <c:if test="${not empty passErr}">
             <div class="error-msg">${passErr}</div>
         </c:if>
