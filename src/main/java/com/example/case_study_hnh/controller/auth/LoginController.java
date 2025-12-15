@@ -30,14 +30,14 @@ public class LoginController extends HttpServlet {
         String nameErr = "";
         String passErr = "";
         if (username==null || username.trim().isEmpty()){
-            nameErr = "username must not be null";
+            nameErr = "username không được để trống";
         } else if (!CheckValidate.checkName(username)) {
-            nameErr = "invalid username, please try again";
+            nameErr = "username sai format, chữ cái đầu phải là in hoa và chỉ được sử dụng kí tự dấu gạch '_' ";
         }
         if (password==null || password.trim().isEmpty()){
-            passErr = "password must not be null";
+            passErr = "password không được để trống";
         } else if (!CheckValidate.checkPass(password)) {
-            passErr = "invalid password, please try again";
+            passErr = "password sai format, không được có kí tự đặc biệt";
         }
 
         if (!nameErr.isEmpty() || !passErr.isEmpty()){
