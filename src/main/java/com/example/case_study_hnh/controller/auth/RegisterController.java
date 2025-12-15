@@ -2,6 +2,7 @@ package com.example.case_study_hnh.controller.auth;
 
 import com.example.case_study_hnh.entity.Account;
 import com.example.case_study_hnh.service.AccountService;
+import com.example.case_study_hnh.service.IAccountService;
 import com.example.case_study_hnh.util.CheckValidate;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,7 +14,9 @@ import java.io.IOException;
 
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
-    private final AccountService accountService = new AccountService();
+//    Đăng ký tài khoản customer
+private final IAccountService accountService = new AccountService();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
