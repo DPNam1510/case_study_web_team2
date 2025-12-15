@@ -14,7 +14,7 @@ import java.util.List;
 
 @WebServlet(name = "CustomerController", urlPatterns = "/admin/customers")
 public class CustomerController extends HttpServlet {
-    private ICustomerAdminRepository customerRepository = new CustomerAdminRepository();
+    private final ICustomerAdminRepository customerRepository = new CustomerAdminRepository();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

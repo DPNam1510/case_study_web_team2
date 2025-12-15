@@ -14,7 +14,7 @@ import java.util.List;
 
 @WebServlet(name = "ServiceController", urlPatterns = "/admin/services")
 public class ServiceController extends HttpServlet {
-    private IServiceAdminRepository serviceRepository = new ServiceAdminRepository();
+    private final IServiceAdminRepository serviceRepository = new ServiceAdminRepository();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 

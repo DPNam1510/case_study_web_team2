@@ -16,7 +16,7 @@ import java.io.IOException;
 @WebServlet(name = "LoginController",value = "/login")
 public class LoginController extends HttpServlet {
 //    Xử lý đăng nhập, tạo session, phân luồng admin/user
-    private IAccountService accountService = new AccountService();
+    private final IAccountService accountService = new AccountService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

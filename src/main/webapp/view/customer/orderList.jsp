@@ -2,8 +2,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: dpnbh
-  Date: 14/12/2025
-  Time: 2:55 CH
+  Date: 16/12/2025
+  Time: 1:39 SA
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dịch vụ khám</title>
+    <title>Orders</title>
 
     <!-- Bootstrap + FontAwesome (đồng bộ style) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -30,33 +30,10 @@
 <div class="container py-4">
 
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-        <h2 class="page-title mb-0"><i class="fa-solid fa-stethoscope"></i> Danh sách dịch vụ</h2>
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-body">
-            <form action="<c:url value="/services"/>" method="get" class="row g-2 align-items-center">
-                <input type="hidden" name="action" value="search">
-
-                <div class="col-12 col-md-8">
-                    <input type="text" name="keyword" class="form-control"
-                           placeholder="Nhập tên dịch vụ"
-                           value="${keyword}">
-                </div>
-
-                <div class="col-6 col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fa-solid fa-magnifying-glass"></i> Tìm
-                    </button>
-                </div>
-
-                <div class="col-6 col-md-2">
-                    <a class="btn btn-outline-secondary w-100" href="<c:url value="/services"/>">
-                        Tất cả
-                    </a>
-                </div>
-            </form>
-        </div>
+        <h2 class="page-title mb-0"><i class="fa-solid fa-receipt"></i> Danh sách đơn hàng</h2>
+        <a class="btn btn-primary" href="<c:url value="/orders?action=add"/>">
+            <i class="fa-solid fa-plus"></i> Tạo đơn mới
+        </a>
     </div>
 
     <div class="card">
@@ -66,23 +43,36 @@
                     <thead class="table-light">
                     <tr>
                         <th>ID</th>
-                        <th>Tên dịch vụ</th>
-                        <th>Bác sĩ</th>
+                        <th>Ngày tạo</th>
+                        <th>Thanh toán</th>
+                        <th class="text-center">Hành động</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    <c:forEach items="${serviceList}" var="s">
+                    <c:forEach items="${ordersList}" var="o">
                         <tr>
-                            <td>${s.id}</td>
-                            <td>${s.name}</td>
-                            <td>${s.doctorName}</td>
+                            <td>${o.id}</td>
+                            <td>${o.dateTime}</td>
+                            <td>Pay type ${o.payTypeId}</td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-info text-white"
+                                   href="<c:url value="/orders?action=view&id=${o.id}"/>">
+                                    <i class="fa-solid fa-eye"></i> Chi tiết
+                                </a>
+                                <a class="btn btn-sm btn-danger"
+                                   href="<c:url value="/orders?action=delete&id=${o.id}"/>"
+                                   onclick="return confirm('Hủy đơn hàng?')">
+                                    <i class="fa-solid fa-trash"></i> Hủy
+                                </a>
+                            </td>
                         </tr>
                     </c:forEach>
-
-                    <c:if test="${empty serviceList}">
+                    <c:if test="${empty ordersList}">
                         <tr>
-                            <td colspan="3" class="text-center text-muted fst-italic">Không có dữ liệu</td>
+                            <td colspan="4" class="text-center text-muted fst-italic">
+                                Không có dữ liệu
+                            </td>
                         </tr>
                     </c:if>
                     </tbody>

@@ -15,7 +15,7 @@ import java.io.IOException;
 @WebServlet(name = "RegisterController",value = "/register")
 public class RegisterController extends HttpServlet {
 //    Đăng ký tài khoản customer
-private IAccountService accountService = new AccountService();
+private final IAccountService accountService = new AccountService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
