@@ -41,7 +41,7 @@
     <div class="hero-content">
         <h1>Chăm sóc sức khỏe tận tâm</h1>
         <p>Đội ngũ bác sĩ giàu kinh nghiệm – Trang thiết bị hiện đại</p>
-        <a href="login.html" class="btn">Đăng ký khám ngay</a>
+        <a href="<c:url value="/view/customer/addMedicalForm.jsp"/>" class="btn">Đăng ký khám ngay</a>
     </div>
 </section>
 

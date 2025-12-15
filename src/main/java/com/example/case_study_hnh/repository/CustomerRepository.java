@@ -18,7 +18,7 @@ public class CustomerRepository implements ICustomerRepository {
 
     @Override
     public List<Customer> findAll() {
-        List<Customer> customers = new ArrayList<>();
+        List<Customer> customerList = new ArrayList<>();
         try (Connection connection = ConnectDB.getConnectDB()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_CUSTOMER);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -32,24 +32,24 @@ public class CustomerRepository implements ICustomerRepository {
                 String email = resultSet.getString("email");
                 String phone = resultSet.getString("phone");
                 String address = resultSet.getString("address");
-                Customer customer = new Customer(id,userName,customerTypeId,name,gender,birthday,email,phone,address);
-                customers.add(customer);
+                Customer customer = new Customer(id, userName, customerTypeId, name, gender, birthday, email, phone, address);
+                customerList.add(customer);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return customers;
+        return customerList;
     }
 
     @Override
-    public Customer findByUserName(String userName) {
+    public Customer findById(int id) {
         Customer customer = null;
         try (Connection connection = ConnectDB.getConnectDB()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USERNAME);
-            preparedStatement.setString(1, userName);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int id = resultSet.getInt("id");
+                String userName = resultSet.getString("userName");
                 int customerTypeId = resultSet.getInt("customer_type_id");
                 String name = resultSet.getString("name");
                 boolean gender = resultSet.getBoolean("gender");

@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dịch vụ khám</title>
+    <title>Customer List</title>
 
     <!-- Bootstrap + FontAwesome (đồng bộ style) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,35 +29,15 @@
 <body>
 <div class="container py-4">
 
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-        <h2 class="page-title mb-0"><i class="fa-solid fa-stethoscope"></i> Danh sách dịch vụ</h2>
-    </div>
+    <h2 class="page-title mb-3 text-center">
+        <i class="fa-solid fa-users"></i> Danh sách khách hàng
+    </h2>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <form action="<c:url value="/services"/>" method="get" class="row g-2 align-items-center">
-                <input type="hidden" name="action" value="search">
-
-                <div class="col-12 col-md-8">
-                    <input type="text" name="keyword" class="form-control"
-                           placeholder="Nhập tên dịch vụ"
-                           value="${keyword}">
-                </div>
-
-                <div class="col-6 col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fa-solid fa-magnifying-glass"></i> Tìm
-                    </button>
-                </div>
-
-                <div class="col-6 col-md-2">
-                    <a class="btn btn-outline-secondary w-100" href="<c:url value="/services"/>">
-                        Tất cả
-                    </a>
-                </div>
-            </form>
+    <c:if test="${param.message != null}">
+        <div class="alert alert-success text-center">
+            <i class="fa-solid fa-circle-check"></i> ${param.message}
         </div>
-    </div>
+    </c:if>
 
     <div class="card">
         <div class="card-body">
@@ -66,23 +46,36 @@
                     <thead class="table-light">
                     <tr>
                         <th>ID</th>
-                        <th>Tên dịch vụ</th>
-                        <th>Bác sĩ</th>
+                        <th>Username</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th class="text-center">Action</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    <c:forEach items="${serviceList}" var="s">
+                    <c:forEach items="${customerList}" var="c">
                         <tr>
-                            <td>${s.id}</td>
-                            <td>${s.name}</td>
-                            <td>${s.doctorName}</td>
+                            <td>${c.id}</td>
+                            <td>${c.userName}</td>
+                            <td>${c.name}</td>
+                            <td>${c.email}</td>
+                            <td>${c.phone}</td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-primary"
+                                   href="<c:url value="/customers?action=update&id=${c.id}"/>">
+                                    <i class="fa-solid fa-pen-to-square"></i> Cập nhật
+                                </a>
+                            </td>
                         </tr>
                     </c:forEach>
 
-                    <c:if test="${empty serviceList}">
+                    <c:if test="${empty customerList}">
                         <tr>
-                            <td colspan="3" class="text-center text-muted fst-italic">Không có dữ liệu</td>
+                            <td colspan="6" class="text-center text-muted fst-italic">
+                                Không có dữ liệu
+                            </td>
                         </tr>
                     </c:if>
                     </tbody>
