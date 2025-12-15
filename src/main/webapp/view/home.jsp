@@ -30,7 +30,8 @@
                 </ul>
             </li>
             <li><a href="sanpham.html">Thực phẩm chức năng</a></li>
-            <li><a href="<c:url value="/view/auth/login.jsp"/>" class="login-btn">Đăng nhập</a></li>
+            <li><a href="<c:url value='/login'/>" class="login-btn">Đăng nhập</a></li>
+
         </ul>
     </nav>
 </header>
