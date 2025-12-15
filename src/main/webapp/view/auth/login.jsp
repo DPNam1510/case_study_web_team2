@@ -63,8 +63,8 @@
         <c:if test="${not empty passErr}">
             <div class="error-msg">${passErr}</div>
         </c:if>
-        <c:if test="${not empty registerErr}">
-            <div class="error-msg">${registerErr}</div>
+        <c:if test="${not empty error}">
+            <div class="error-msg">${error}</div>
         </c:if>
         <c:if test="${param.mess == 'register_success'}">
             <div class="success-msg">Đăng ký thành công. Vui lòng đăng nhập!</div>

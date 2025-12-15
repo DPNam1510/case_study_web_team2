@@ -132,8 +132,8 @@ INSERT INTO customer(username, customer_type_id, name, gender, birthday, email, 
 ('Thuyhoang', 3, 'Hoang Thuy', 0, '1985-02-05', 'thuy@gmail.com', '0911010101', 'Quang Tri'),
 ('Hieunt', 4, 'Nguyen Trong Hieu', 1, '1990-08-14', 'hieu@gmail.com', '0912020202', 'Quang Ngai'),
 ('Hongtt', 4, 'Tran Thi Hong', 0, '1987-12-19', 'hong@gmail.com', '0913030303', 'Nghe An'),
-('Huylh', 4, 'Le Huynh Huy', 1, '1992-05-27', 'long@gmail.com', '0914040404', 'Ho Chi Minh'),
-('Leptd', 4, 'Pham Thi Diem Le', 0, '1989-10-02', 'nguyen@gmail.com', '0915050505', 'Gia Lai'),
+('Huylh', 4, 'Le Huynh Huy', 1, '1992-05-27', 'huy92@gmail.com', '0914040404', 'Ho Chi Minh'),
+('Leptd', 4, 'Pham Thi Diem Le', 0, '1989-10-02', 'le89@gmail.com', '0915050505', 'Gia Lai'),
 ('Haotm', 4, 'Tran Minh Hao', 1, '1991-01-15', 'hao@gmail.com', '0916060606', 'Quang Binh');
 
 
@@ -248,3 +248,13 @@ INSERT INTO orders_detail(id, orders_id, supplements_id, quantity, date_time) VA
 (15, 13, 7, 1, '2024-06-22 12:25:00'),
 (16, 14, 15, 1, '2024-11-05 20:25:00'),
 (17, 15, 8, 2, '2025-03-15 15:10:00');
+
+INSERT INTO medical_forms(id, customer_id, date_time, appointment_time, status) VALUES
+(16, 16, '2025-12-16', '2025-12-16 09:00:00', 'Pending');
+
+select sv.*,c.username as username
+from service sv
+join forms_detail fd on sv.id = fd.service_id
+join medical_forms mf on fd.forms_id = mf.id
+join customer c on mf.customer_id = c.id;
+

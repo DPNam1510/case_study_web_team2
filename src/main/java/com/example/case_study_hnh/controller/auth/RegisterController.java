@@ -1,4 +1,3 @@
-
 package com.example.case_study_hnh.controller.auth;
 
 import com.example.case_study_hnh.entity.Account;
@@ -12,14 +11,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-@WebServlet(name = "RegisterController",value = "/register")
+
+@WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
 //    Đăng ký tài khoản customer
 private final IAccountService accountService = new AccountService();
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/view/auth/login.jsp").forward(req,resp);
+        req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
     }
 
     @Override
@@ -41,25 +42,27 @@ private final IAccountService accountService = new AccountService();
 
         if (!nameErr.isEmpty() || !passErr.isEmpty()){
             req.setAttribute("username",username);
+            req.setAttribute("password",password);
+
             req.setAttribute("nameErr",nameErr);
             req.setAttribute("passErr",passErr);
             req.getRequestDispatcher("/view/auth/login.jsp").forward(req,resp);
             return;
         }
-
-        Account account = new Account(username,password,"customer");
-        boolean isSuccess = accountService.register(account);
-        if (!isSuccess){
-            String registerErr = "username đã tồn tại";
-            req.setAttribute("username",username);
-            req.setAttribute("registerErr",registerErr);
-            req.getRequestDispatcher("/view/auth/login.jsp").forward(req,resp);
+        if (accountService.existUsername(username)) {
+            req.setAttribute("error", "Username đã tồn tại!");
+            req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
             return;
         }
-        try {
-            resp.sendRedirect(req.getContextPath() + "/register?mess=register_success");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+        Account account = new Account(username.trim(), password.trim(), "customer");
+
+        boolean ok = accountService.register(account);
+        if (ok) {
+            resp.sendRedirect(req.getContextPath() + "/login?mess=register_success");
+        } else {
+            req.setAttribute("error", "Đăng ký thất bại (DB). Kiểm tra console log!");
+            req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
         }
     }
 }

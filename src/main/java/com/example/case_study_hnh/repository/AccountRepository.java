@@ -3,67 +3,108 @@ package com.example.case_study_hnh.repository;
 import com.example.case_study_hnh.entity.Account;
 import com.example.case_study_hnh.util.ConnectDB;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 
-public class AccountRepository implements IAccountRepository{
+public class AccountRepository implements IAccountRepository {
 
-    private final String SELECT_USER = "select * from account where username = ?";
-    private final String INSERT = "INSERT INTO account(username, password, date_create, role) VALUES(?,?,?,?)";
+    private static final String SELECT_BY_USERNAME =
+            "SELECT username, password, date_create, role FROM account WHERE username = ?";
 
-    private final String EXISTS_USER =
+    private static final String CHECK_USERNAME =
             "SELECT 1 FROM account WHERE username = ?";
 
+    private static final String INSERT_ACCOUNT =
+            "INSERT INTO account(username, password, date_create, role) VALUES(?, ?, ?, ?)";
+
+    private static final String INSERT_CUSTOMER_EMPTY =
+            "INSERT INTO customer(username, customer_type_id, name, gender, birthday, email, phone, address) " +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+
+    @Override
+    public Account getByUsername(String username) {
+        try (Connection connection = ConnectDB.getConnectDB();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_USERNAME)) {
+
+            preparedStatement.setString(1, username);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                Account account = new Account();
+                account.setUsername(rs.getString("username"));
+                account.setPassword(rs.getString("password"));
+
+                Date d = rs.getDate("date_create");
+                account.setDateCreate(d != null ? d.toLocalDate() : null);
+
+                account.setRole(rs.getString("role"));
+                return account;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public boolean existUsername(String username) {
-        try (Connection connection = ConnectDB.getConnectDB()) {
-            PreparedStatement ps = connection.prepareStatement(EXISTS_USER);
+        try (Connection connection = ConnectDB.getConnectDB();
+             PreparedStatement ps = connection.prepareStatement(CHECK_USERNAME)) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             return rs.next();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-    }
-
-    @Override
-    public Account getByUsername(String username) {
-        Account account = null;
-
-        try(Connection connection = ConnectDB.getConnectDB()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER);
-            preparedStatement.setString(1,username);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
-                String usernameGet = resultSet.getString("username");
-                String passwordGet = resultSet.getString("password");
-                LocalDate dateCreate = resultSet.getObject("date_create", LocalDate.class);
-                String role = resultSet.getString("role");
-                account = new Account(usernameGet,passwordGet,dateCreate,role);
-
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return account;
+        return false;
     }
 
     @Override
     public boolean register(Account account) {
-        try(Connection connection = ConnectDB.getConnectDB()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
-            preparedStatement.setString(1,account.getUsername());
-            preparedStatement.setString(2, account.getPassword());
-            preparedStatement.setObject(3, account.getDateCreate());
-            preparedStatement.setString(4, account.getRole());
-            int effectRow = preparedStatement.executeUpdate();
-            return effectRow == 1;
+        Connection conn = null;
+        try {
+            conn = ConnectDB.getConnectDB();
+            conn.setAutoCommit(false);
+
+
+            try (PreparedStatement psAcc = conn.prepareStatement(INSERT_ACCOUNT)) {
+                psAcc.setString(1, account.getUsername());
+                psAcc.setString(2, account.getPassword());
+
+                LocalDate dc = account.getDateCreate() != null ? account.getDateCreate() : LocalDate.now();
+                psAcc.setDate(3, Date.valueOf(dc));
+
+                psAcc.setString(4, account.getRole());
+                psAcc.executeUpdate();
+            }
+
+
+            try (PreparedStatement psCus = conn.prepareStatement(INSERT_CUSTOMER_EMPTY)) {
+                psCus.setString(1, account.getUsername());
+                psCus.setInt(2, 4);
+
+                psCus.setNull(3, Types.VARCHAR);
+                psCus.setNull(4, Types.BOOLEAN);
+                psCus.setNull(5, Types.DATE);
+                psCus.setNull(6, Types.VARCHAR);
+                psCus.setNull(7, Types.VARCHAR);
+                psCus.setNull(8, Types.VARCHAR);
+
+                psCus.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
         } catch (SQLException e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
             e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
         return false;
     }

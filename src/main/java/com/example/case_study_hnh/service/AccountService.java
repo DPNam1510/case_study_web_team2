@@ -10,6 +10,10 @@ public class AccountService implements IAccountService{
     private IAccountRepository accountRepository = new AccountRepository();
 
     @Override
+    public boolean existUsername(String username) {
+        return accountRepository.existUsername(username);
+    }
+    @Override
     public Account login(String username,String password) {
         Account account = accountRepository.getByUsername(username);
         if (account == null){
@@ -23,10 +27,8 @@ public class AccountService implements IAccountService{
 
     @Override
     public boolean register(Account account) {
-        if (accountRepository.existUsername(account.getUsername())){
-            return false;
-        }
         account.setDateCreate(LocalDate.now());
         return accountRepository.register(account);
     }
+
 }

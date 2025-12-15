@@ -5,6 +5,7 @@ import com.example.case_study_hnh.entity.Account;
 import java.util.List;
 
 public interface IAccountService {
+    boolean existUsername(String username);
     Account login(String username,String password);
     boolean register(Account account);
 }

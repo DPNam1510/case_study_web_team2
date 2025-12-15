@@ -24,7 +24,7 @@ public class CustomerRepository implements ICustomerRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
-                String userName = resultSet.getString("userName");
+                String userName = resultSet.getString("username");
                 int customerTypeId = resultSet.getInt("customerTypeId");
                 String name = resultSet.getString("name");
                 boolean gender = resultSet.getBoolean("gender");
@@ -70,7 +70,7 @@ public class CustomerRepository implements ICustomerRepository {
         boolean isSuccess;
         try (Connection connection = ConnectDB.getConnectDB()) {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-            preparedStatement.setString(1, customer.getUserName());
+            preparedStatement.setString(1, customer.getUsername());
             preparedStatement.setInt(2, customer.getCustomerTypeId());
             preparedStatement.setString(3, customer.getName());
             preparedStatement.setBoolean(4, customer.isGender());
