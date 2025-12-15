@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>HOSPITAL</title>
     <c:import url="/layout/library.jsp"/>
     <link rel="stylesheet" href="<c:url value="/assets/css/home.css"/>">
 </head>
@@ -30,7 +30,8 @@
                 </ul>
             </li>
             <li><a href="sanpham.html">Thực phẩm chức năng</a></li>
-            <li><a href="login.html" class="login-btn">Đăng nhập</a></li>
+            <li><a href="<c:url value='/login'/>" class="login-btn">Đăng nhập</a></li>
+
         </ul>
     </nav>
 </header>

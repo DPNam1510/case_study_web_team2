@@ -30,9 +30,7 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
                         rs.getDate("birthday").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("phone"),
-                        rs.getString("address"),
-                        rs.getString("password"),
-                        rs.getString("roll")
+                        rs.getString("address")
                 );
                 customers.add(customer);
             }
@@ -69,9 +67,7 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
                             rs.getDate("birthday").toLocalDate(),
                             rs.getString("email"),
                             rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("password"),
-                            rs.getString("roll")
+                            rs.getString("address")
                     );
                     customers.add(customer);
                 }
@@ -104,9 +100,7 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
                             rs.getDate("birthday").toLocalDate(),
                             rs.getString("email"),
                             rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("password"),
-                            rs.getString("roll")
+                            rs.getString("address")
                     );
                 }
             }

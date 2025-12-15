@@ -3,7 +3,7 @@ import java.time.LocalDate;
 
 public class Customer {
     private int id;
-    private String username;
+    private String userName;
     private int customerTypeId;
     private String name;
     private boolean gender;
@@ -11,14 +11,12 @@ public class Customer {
     private String email;
     private String phone;
     private String address;
-    private String password;
-    private String role;
 
     public Customer() {
     }
 
-    public Customer(String username, int customerTypeId, String name, boolean gender, LocalDate birthday, String email, String phone, String address, String password, String role) {
-        this.username = username;
+    public Customer(String username, int customerTypeId, String name, boolean gender, LocalDate birthday, String email, String phone, String address) {
+        this.userName = username;
         this.customerTypeId = customerTypeId;
         this.name = name;
         this.gender = gender;
@@ -26,13 +24,11 @@ public class Customer {
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.password = password;
-        this.role = role;
     }
 
-    public Customer(int id, String username, int customerTypeId, String name, boolean gender, LocalDate birthday, String email, String phone, String address, String password, String role) {
+    public Customer(int id, String username, int customerTypeId, String name, boolean gender, LocalDate birthday, String email, String phone, String address) {
         this.id = id;
-        this.username = username;
+        this.userName = username;
         this.customerTypeId = customerTypeId;
         this.name = name;
         this.gender = gender;
@@ -40,8 +36,6 @@ public class Customer {
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.password = password;
-        this.role = role;
     }
 
     public int getId() {
@@ -52,12 +46,12 @@ public class Customer {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public int getCustomerTypeId() {
@@ -116,19 +110,4 @@ public class Customer {
         this.address = address;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

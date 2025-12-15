@@ -34,7 +34,7 @@ import java.io.IOException;
 
             // 🔒 ADMIN URL – CHỈ ADMIN ĐƯỢC VÀO
             if (uri.startsWith(request.getContextPath() + "/admin")
-                    && !"ADMIN".equals(customer.getRole())) {
+                    && !"ADMIN".equals(customer)) {
                 response.sendRedirect(request.getContextPath() + "/user/home");
                 return;
             }
