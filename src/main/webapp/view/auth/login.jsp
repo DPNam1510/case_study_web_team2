@@ -28,28 +28,49 @@
     </div>
 
     <!-- FORM ĐĂNG NHẬP -->
-    <form id="formSignIn" class="form active" action="" method="post">
+    <form id="formSignIn" class="form active" action="<c:url value='/login'/>" method="post">
         <label for="email">Username or email</label>
-        <input type="text" id="email" placeholder="example@gmail.com">
+        <input type="text" id="email" name="username" placeholder="example@gmail.com"
+               value="<c:out value='${username}'/>">
+        <c:if test="${not empty nameErr}">
+            <div class="error-msg">${nameErr}</div>
+        </c:if>
 
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="********">
+        <input type="password" id="password" name="password" placeholder="********"/>
+        <c:if test="${not empty passErr}">
+            <div class="error-msg">${passErr}</div>
+        </c:if>
+
+        <c:if test="${not empty loginErr}">
+            <div class="error-msg">${loginErr}</div>
+        </c:if>
+
         <button type="submit" class="btn-login">Sign In</button>
     </form>
 
     <!-- FORM ĐĂNG KÝ -->
-    <form id="formRegister" class="form" action="" method="post">
+    <form id="formRegister" class="form" action="<c:url value='/register'/>" method="post">
         <label>Username</label>
-        <input type="text" placeholder="username">
-
+        <input type="text" name="username" placeholder="username"
+               value="<c:out value='${username}'/>">
+        <c:if test="${not empty nameErr}">
+            <div class="error-msg">${nameErr}</div>
+        </c:if>
         <label>Password</label>
-        <input type="password" placeholder="********">
-
+        <input type="password" name="password" placeholder="********">
+        <c:if test="${not empty passErr}">
+            <div class="error-msg">${passErr}</div>
+        </c:if>
+        <c:if test="${not empty registerErr}">
+            <div class="error-msg">${registerErr}</div>
+        </c:if>
+        <c:if test="${param.mess == 'register_success'}">
+            <div class="success-msg">Đăng ký thành công. Vui lòng đăng nhập!</div>
+        </c:if>
         <!-- Account type mặc định -->
         <input type="hidden" name="role" value="CUSTOMER">
-
         <button type="submit" class="btn-login">Register</button>
-
     </form>
 
 </div>

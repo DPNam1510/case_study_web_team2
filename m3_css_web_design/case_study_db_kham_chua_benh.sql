@@ -3,9 +3,23 @@ create database m3_kham_chua_benh;
 use m3_kham_chua_benh;
 create table account(
 username varchar(20) primary key,
-password varchar(20),
+password varchar(20) not null,
 date_create date,
-roll varchar(20)
+role varchar(20)
+);
+CREATE TABLE login_history(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    login_time DATETIME NOT NULL,
+    ip_address VARCHAR(50),
+    FOREIGN KEY (username) REFERENCES account(username)
+);
+CREATE TABLE password_history(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    changed_at DATETIME NOT NULL,
+    FOREIGN KEY (username) REFERENCES account(username)
 );
 create table customer_type(
 id int primary key auto_increment,
@@ -78,7 +92,7 @@ quantity int,
 date_time datetime
 );
 -- insert table 
-INSERT INTO account(username, password, date_create, roll) VALUES
+INSERT INTO account(username, password, date_create, role) VALUES
 ('Dpnam', '151020', '2019-12-15', 'admin'),
 ('Huyg', '051197', '2019-12-15', 'admin'),
 ('Hieuhn', 'hieuhn', '2019-12-15', 'admin'),
