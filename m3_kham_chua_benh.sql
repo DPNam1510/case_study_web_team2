@@ -1,0 +1,1 @@
+SELECT * FROM m3_kham_chua_benh.account;
