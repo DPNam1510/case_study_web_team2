@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 @WebServlet(name = "LoginController",value = "/login")
 public class LoginController extends HttpServlet {
@@ -51,19 +50,13 @@ public class LoginController extends HttpServlet {
         }
         Account account = accountService.login(username,password);
         if (account == null) {
-            req.setAttribute("loginErr", "username or password is incorrect");
+            req.setAttribute("loginErr", "username or password không trùng khớp");
             req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
             return;
         }
 
-
         req.getSession().setAttribute("account", account);
 
-        // --- Lưu login history (nếu muốn) ---
-        // LoginHistoryService loginHistoryService = new LoginHistoryService();
-        // loginHistoryService.addLoginHistory(account.getUsername(), LocalDateTime.now(), req.getRemoteAddr());
-
-        // --- Phân quyền ---
         if ("admin".equalsIgnoreCase(account.getRole())) {
             resp.sendRedirect(req.getContextPath() + "/view/admin/dashboard.jsp");
         } else {
