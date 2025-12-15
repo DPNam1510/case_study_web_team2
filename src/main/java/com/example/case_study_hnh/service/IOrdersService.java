@@ -1,10 +1,10 @@
-package com.example.case_study_hnh.repository;
+package com.example.case_study_hnh.service;
 
 import com.example.case_study_hnh.entity.Orders;
 
 import java.util.List;
 
-public interface IOrdersRepository {
+public interface IOrdersService {
     List<Orders> findByCustomer(int customerId);
 
     boolean add(Orders orders);
