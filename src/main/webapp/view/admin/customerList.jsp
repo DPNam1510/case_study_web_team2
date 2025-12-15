@@ -92,10 +92,43 @@
                         <c:forEach var="customer" items="${customers}">
                             <tr>
                                 <td>${customer.id}</td>
-                                <td>${customer.name}</td>
-                                <td>${customer.email}</td>
-                                <td>${customer.phone}</td>
-                                <td>${customer.address}</td>
+
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${empty customer.name}">
+                                            <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                        </c:when>
+                                        <c:otherwise>${customer.name}</c:otherwise>
+                                    </c:choose>
+                                </td>
+
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${empty customer.email}">
+                                            <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                        </c:when>
+                                        <c:otherwise>${customer.email}</c:otherwise>
+                                    </c:choose>
+                                </td>
+
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${empty customer.phone}">
+                                            <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                        </c:when>
+                                        <c:otherwise>${customer.phone}</c:otherwise>
+                                    </c:choose>
+                                </td>
+
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${empty customer.address}">
+                                            <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                        </c:when>
+                                        <c:otherwise>${customer.address}</c:otherwise>
+                                    </c:choose>
+                                </td>
+
                                 <td class="text-center">
                                     <a href="${pageContext.request.contextPath}/admin/customers?action=view&id=${customer.id}"
                                        class="btn btn-sm btn-info text-white">
@@ -111,6 +144,10 @@
                         </tbody>
                     </table>
                 </div>
+                <a href="/view/admin/dashboard.jsp"
+                   class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Quay lại
+                </a>
             </c:if>
         </div>
     </div>

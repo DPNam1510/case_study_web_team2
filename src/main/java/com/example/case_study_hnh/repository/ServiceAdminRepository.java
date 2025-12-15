@@ -12,7 +12,7 @@ public class ServiceAdminRepository implements IServiceAdminRepository {
     @Override
     public List<Service> findAll() {
         List<Service> services = new ArrayList<>();
-        String query = "SELECT * FROM service ORDER BY id DESC";
+        String query = "SELECT * FROM service ORDER BY id";
 
         try (Connection conn = ConnectDB.getConnectDB();
              PreparedStatement ps = conn.prepareStatement(query);
@@ -35,7 +35,7 @@ public class ServiceAdminRepository implements IServiceAdminRepository {
     @Override
     public List<Service> searchByName(String keyword) {
         List<Service> services = new ArrayList<>();
-        String query = "SELECT * FROM service WHERE name LIKE ? OR doctor_name LIKE ? ORDER BY id DESC";
+        String query = "SELECT * FROM service WHERE name LIKE ? OR doctor_name LIKE ? ORDER BY id";
 
         try (Connection conn = ConnectDB.getConnectDB();
              PreparedStatement ps = conn.prepareStatement(query)) {

@@ -34,40 +34,95 @@
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-muted">Username</h6>
-                            <p class="fw-bold">${customer.username}</p>
+                            <p class="fw-bold">
+                                <c:choose>
+                                    <c:when test="${empty customer.username}">
+                                        <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                    </c:when>
+                                    <c:otherwise>${customer.username}</c:otherwise>
+                                </c:choose>
+                            </p>
+
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-muted">Họ và tên</h6>
-                            <p class="fw-bold">${customer.name}</p>
+                            <p class="fw-bold">
+                                <c:choose>
+                                    <c:when test="${empty customer.name}">
+                                        <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                    </c:when>
+                                    <c:otherwise>${customer.name}</c:otherwise>
+                                </c:choose>
+                            </p>
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-muted">Giới tính</h6>
-                            <p class="fw-bold">${customer.gender ? 'Nam' : 'Nữ'}</p>
+                            <p class="fw-bold">
+                                <c:choose>
+                                    <c:when test="${empty customer.gender}">
+                                        <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                    </c:when>
+                                    <c:otherwise>${customer.gender ? 'Nam' : 'Nữ'}</c:otherwise>
+                                </c:choose>
+                            </p>
+
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-muted">Ngày sinh</h6>
-                            <p class="fw-bold">${customer.birthday}</p>
+                            <p class="fw-bold">
+                                <c:choose>
+                                    <c:when test="${empty customer.birthday}">
+                                        <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                    </c:when>
+                                    <c:otherwise>${customer.birthday}</c:otherwise>
+                                </c:choose>
+                            </p>
+
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-muted">Email</h6>
-                            <p class="fw-bold">${customer.email}</p>
+                            <p class="fw-bold">
+                                <c:choose>
+                                    <c:when test="${empty customer.email}">
+                                        <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                    </c:when>
+                                    <c:otherwise>${customer.email}</c:otherwise>
+                                </c:choose>
+                            </p>
+
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-muted">Số điện thoại</h6>
-                            <p class="fw-bold">${customer.phone}</p>
+                            <p class="fw-bold">
+                                <c:choose>
+                                    <c:when test="${empty customer.phone}">
+                                        <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                    </c:when>
+                                    <c:otherwise>${customer.phone}</c:otherwise>
+                                </c:choose>
+                            </p>
+
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-muted">Địa chỉ</h6>
-                            <p class="fw-bold">${customer.address}</p>
+                            <p class="fw-bold">
+                                <c:choose>
+                                    <c:when test="${empty customer.address}">
+                                        <span class="text-muted fst-italic">Chưa cập nhật</span>
+                                    </c:when>
+                                    <c:otherwise>${customer.address}</c:otherwise>
+                                </c:choose>
+                            </p>
+
                         </div>
                     </div>
 
