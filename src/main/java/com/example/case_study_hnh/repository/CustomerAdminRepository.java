@@ -4,6 +4,7 @@ import com.example.case_study_hnh.entity.Customer;
 import com.example.case_study_hnh.util.ConnectDB;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,25 +13,33 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
     @Override
     public List<Customer> findAll() {
         List<Customer> customers = new ArrayList<>();
-        String query = "SELECT c.*, a.password, a.roll FROM customer c " +
+        String query = "SELECT c.*, a.password, a.role FROM customer c " +
                 "JOIN account a ON c.username = a.username " +
-                "WHERE a.roll = 'customer' ORDER BY c.id DESC";
+                "WHERE a.role = 'customer' ORDER BY c.id";
 
         try (Connection conn = ConnectDB.getConnectDB();
              PreparedStatement ps = conn.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
+                LocalDate birthday = null;
+                Date bd = rs.getDate("birthday");
+                if (bd != null) birthday = bd.toLocalDate();
+
+                Boolean gender = (Boolean) rs.getObject("gender");
+
                 Customer customer = new Customer(
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getInt("customer_type_id"),
                         rs.getString("name"),
-                        rs.getBoolean("gender"),
-                        rs.getDate("birthday").toLocalDate(),
+                        gender,
+                        birthday,
                         rs.getString("email"),
                         rs.getString("phone"),
-                        rs.getString("address")
+                        rs.getString("address"),
+                        rs.getString("password"),
+                        rs.getString("role")
                 );
                 customers.add(customer);
             }
@@ -43,10 +52,10 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
     @Override
     public List<Customer> searchByName(String keyword) {
         List<Customer> customers = new ArrayList<>();
-        String query = "SELECT c.*, a.password, a.roll FROM customer c " +
+        String query = "SELECT c.*, a.password, a.role FROM customer c " +
                 "JOIN account a ON c.username = a.username " +
-                "WHERE a.roll = 'customer' AND (c.name LIKE ? OR c.email LIKE ? OR c.phone LIKE ?) " +
-                "ORDER BY c.id DESC";
+                "WHERE a.role = 'customer' AND (c.name LIKE ? OR c.email LIKE ? OR c.phone LIKE ?) " +
+                "ORDER BY c.id";
 
         try (Connection conn = ConnectDB.getConnectDB();
              PreparedStatement ps = conn.prepareStatement(query)) {
@@ -58,16 +67,24 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
+                    LocalDate birthday = null;
+                    Date bd = rs.getDate("birthday");
+                    if (bd != null) birthday = bd.toLocalDate();
+
+                    Boolean gender = (Boolean) rs.getObject("gender");
+
                     Customer customer = new Customer(
                             rs.getInt("id"),
                             rs.getString("username"),
                             rs.getInt("customer_type_id"),
                             rs.getString("name"),
-                            rs.getBoolean("gender"),
-                            rs.getDate("birthday").toLocalDate(),
+                            gender,
+                            birthday,
                             rs.getString("email"),
                             rs.getString("phone"),
-                            rs.getString("address")
+                            rs.getString("address"),
+                            rs.getString("password"),
+                            rs.getString("role")
                     );
                     customers.add(customer);
                 }
@@ -80,7 +97,7 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
 
     @Override
     public Customer findById(int id) {
-        String query = "SELECT c.*, a.password, a.roll FROM customer c " +
+        String query = "SELECT c.*, a.password, a.role FROM customer c " +
                 "JOIN account a ON c.username = a.username " +
                 "WHERE c.id = ?";
 
@@ -91,16 +108,24 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    LocalDate birthday = null;
+                    Date bd = rs.getDate("birthday");
+                    if (bd != null) birthday = bd.toLocalDate();
+
+                    Boolean gender = (Boolean) rs.getObject("gender");
+
                     return new Customer(
                             rs.getInt("id"),
                             rs.getString("username"),
                             rs.getInt("customer_type_id"),
                             rs.getString("name"),
-                            rs.getBoolean("gender"),
-                            rs.getDate("birthday").toLocalDate(),
+                            gender,
+                            birthday,
                             rs.getString("email"),
                             rs.getString("phone"),
-                            rs.getString("address")
+                            rs.getString("address"),
+                            rs.getString("password"),
+                            rs.getString("role")
                     );
                 }
             }
@@ -113,16 +138,11 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
     @Override
     public boolean hasUsedService(int customerId) {
         String query = "SELECT COUNT(*) as count FROM medical_forms WHERE customer_id = ?";
-
         try (Connection conn = ConnectDB.getConnectDB();
              PreparedStatement ps = conn.prepareStatement(query)) {
-
             ps.setInt(1, customerId);
-
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("count") > 0;
-                }
+                if (rs.next()) return rs.getInt("count") > 0;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,15 +157,12 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
             conn = ConnectDB.getConnectDB();
             conn.setAutoCommit(false);
 
-            // Get username
             String getUsername = "SELECT username FROM customer WHERE id = ?";
             String username = null;
             try (PreparedStatement ps = conn.prepareStatement(getUsername)) {
                 ps.setInt(1, customerId);
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        username = rs.getString("username");
-                    }
+                    if (rs.next()) username = rs.getString("username");
                 }
             }
 
@@ -154,39 +171,27 @@ public class CustomerAdminRepository implements ICustomerAdminRepository {
                 return false;
             }
 
-            // Delete customer
-            String deleteCustomer = "DELETE FROM customer WHERE id = ?";
-            try (PreparedStatement ps = conn.prepareStatement(deleteCustomer)) {
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM customer WHERE id = ?")) {
                 ps.setInt(1, customerId);
                 ps.executeUpdate();
             }
 
-            // Delete account
-            String deleteAccount = "DELETE FROM account WHERE username = ?";
-            try (PreparedStatement ps = conn.prepareStatement(deleteAccount)) {
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM account WHERE username = ?")) {
                 ps.setString(1, username);
                 ps.executeUpdate();
             }
 
             conn.commit();
             return true;
+
         } catch (SQLException e) {
             if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             }
             e.printStackTrace();
         } finally {
             if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { e.printStackTrace(); }
             }
         }
         return false;
