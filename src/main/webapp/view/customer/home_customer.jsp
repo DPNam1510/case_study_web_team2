@@ -25,11 +25,13 @@
                 <a href="#">Dịch vụ ▾</a>
 
                 <ul class="dropdown-menu">
-                    <li><a href="login.html">Khám chữa bệnh</a></li>
-                    <li><a href="thuoc.html">Thuốc kê đơn</a></li>
+                    <li><a href="serviceList.jsp">Khám chữa bệnh</a></li>
+                    <li><a href="">Thuốc kê đơn</a></li>
+<%--                    tao bang formsDetail--%>
                 </ul>
             </li>
-            <li><a href="sanpham.html">Thực phẩm chức năng</a></li>
+            <li><a href="">Thực phẩm chức năng</a></li>
+<%--            tao bang dietarySupplement--%>
             <li><a href="<c:url value="/view/auth/login.jsp"/>" class="login-btn">Đăng nhập</a></li>
         </ul>
     </nav>
@@ -40,7 +42,7 @@
     <div class="hero-content">
         <h1>Chăm sóc sức khỏe tận tâm</h1>
         <p>Đội ngũ bác sĩ giàu kinh nghiệm – Trang thiết bị hiện đại</p>
-        <a href="login.html" class="btn">Đăng ký khám ngay</a>
+        <a href="<c:url value="/view/customer/addMedicalForm.jsp"/>" class="btn">Đăng ký khám ngay</a>
     </div>
 </section>
 

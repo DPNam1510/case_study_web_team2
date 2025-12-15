@@ -16,6 +16,7 @@ import java.io.IOException;
 public class RegisterController extends HttpServlet {
     private final IAccountService accountService = new AccountService();
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
