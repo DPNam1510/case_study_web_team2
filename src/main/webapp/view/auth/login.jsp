@@ -39,9 +39,6 @@
 
     <!-- FORM ĐĂNG KÝ -->
     <form id="formRegister" class="form" action="" method="post">
-        <label>Email</label>
-        <input type="email" placeholder="example@gmail.com">
-
         <label>Username</label>
         <input type="text" placeholder="username">
 
