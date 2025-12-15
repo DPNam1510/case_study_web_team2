@@ -21,6 +21,7 @@ public class Account {
     public Account(String username, String password, String role) {
         this.username = username;
         this.password = password;
+        this.dateCreate = LocalDate.now();
         this.role = role;
     }
 

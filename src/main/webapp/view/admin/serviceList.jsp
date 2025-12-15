@@ -110,6 +110,10 @@
                         </tbody>
                     </table>
                 </div>
+                <a href="/view/admin/dashboard.jsp"
+                   class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Quay lại
+                </a>
             </c:if>
         </div>
     </div>
