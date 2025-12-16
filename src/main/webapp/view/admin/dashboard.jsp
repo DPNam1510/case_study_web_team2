@@ -101,6 +101,10 @@
                            href="${pageContext.request.contextPath}/admin/services">
                             <i class="fas fa-list"></i> Danh sách dịch vụ
                         </a>
+                        <a class="btn btn-success"
+                           href="/admin-registered-service">
+                            <i class="fas fa-list"></i> Dịch vụ đã được đăng ký
+                        </a>
                         <a class="btn btn-outline-success"
                            href="${pageContext.request.contextPath}/admin/services?action=create">
                             <i class="fas fa-plus"></i> Thêm dịch vụ mới
@@ -109,9 +113,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
