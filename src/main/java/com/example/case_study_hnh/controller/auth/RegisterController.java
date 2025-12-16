@@ -14,52 +14,70 @@ import java.io.IOException;
 
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
-    private final IAccountService accountService = new AccountService();
 
+    private final IAccountService accountService = new AccountService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Mở trang đăng ký: dùng trang login.jsp (chứa 2 tab) và bật tab Register
+        req.setAttribute("tab", "register");
         req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+
         String nameErr = "";
         String passErr = "";
-        if (username==null || username.trim().isEmpty()){
+
+        // Luôn giữ tab Register sau khi submit
+        req.setAttribute("tab", "register");
+
+        // Validate username
+        if (username == null || username.trim().isEmpty()) {
             nameErr = "username không được để trống";
         } else if (!CheckValidate.checkName(username)) {
             nameErr = "username sai format, chữ cái đầu phải là in hoa và chỉ được sử dụng kí tự dấu gạch '_' ";
         }
-        if (password==null || password.trim().isEmpty()){
+
+        // Validate password
+        if (password == null || password.trim().isEmpty()) {
             passErr = "password không được để trống";
         } else if (!CheckValidate.checkPass(password)) {
             passErr = "password sai format, không được có kí tự đặc biệt";
         }
 
-        if (!nameErr.isEmpty() || !passErr.isEmpty()){
-            req.setAttribute("username",username);
-            req.setAttribute("password",password);
-
-            req.setAttribute("nameErr",nameErr);
-            req.setAttribute("passErr",passErr);
-            req.getRequestDispatcher("/view/auth/login.jsp").forward(req,resp);
+        // Nếu có lỗi -> vẫn ở Register và show lỗi
+        if (!nameErr.isEmpty() || !passErr.isEmpty()) {
+            req.setAttribute("username", username);
+            req.setAttribute("nameErr", nameErr);
+            req.setAttribute("passErr", passErr);
+            req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
             return;
         }
-        if (accountService.existUsername(username)) {
+
+        // Check username tồn tại
+        if (accountService.existUsername(username.trim())) {
+            req.setAttribute("username", username);
             req.setAttribute("error", "Username đã tồn tại!");
             req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
             return;
         }
 
+        // Register
         Account account = new Account(username.trim(), password.trim(), "customer");
-
         boolean ok = accountService.register(account);
+
         if (ok) {
-            resp.sendRedirect(req.getContextPath() + "/login?mess=register_success");
+            req.setAttribute("tab", "register");
+            req.setAttribute("success", "Đăng ký thành công!");
+            req.setAttribute("username", username); // GIỮ NGUYÊN username, không cho biến mất
+            req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
         } else {
+            req.setAttribute("username", username);
             req.setAttribute("error", "Đăng ký thất bại (DB). Kiểm tra console log!");
             req.getRequestDispatcher("/view/auth/login.jsp").forward(req, resp);
         }

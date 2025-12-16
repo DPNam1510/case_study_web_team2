@@ -3,7 +3,6 @@
   User: dpnbh
   Date: 14/12/2025
   Time: 2:52 CH
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -15,62 +14,91 @@
     <title>Quản lý Dịch vụ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .back-fixed{
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 99999;
+            border-radius: 999px;
+            padding: 10px 14px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        /* Sticky header cho tiêu đề + nút thêm + search */
+        .sticky-header{
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #fff;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+    </style>
 </head>
+
 <body>
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-stethoscope"></i> Quản lý Dịch vụ Khám chữa bệnh</h2>
-        <a href="${pageContext.request.contextPath}/admin/services?action=create" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Thêm dịch vụ mới
-        </a>
+
+    <div class="sticky-header">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0"><i class="fas fa-stethoscope"></i> Quản lý Dịch vụ Khám chữa bệnh</h2>
+
+            <a href="${pageContext.request.contextPath}/admin/services?action=create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Thêm dịch vụ mới
+            </a>
+        </div>
+
+        <!-- Search Form -->
+        <div class="card mb-0">
+            <div class="card-body">
+                <form method="get" action="${pageContext.request.contextPath}/admin/services" class="row g-3">
+                    <div class="col-md-10">
+                        <input type="text" name="keyword" class="form-control"
+                               placeholder="Tìm kiếm theo tên dịch vụ hoặc bác sĩ..."
+                               value="${keyword}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Tìm kiếm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <!-- Alert Messages -->
     <c:if test="${param.success == 'created'}">
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show mt-3">
             <i class="fas fa-check-circle"></i> Thêm dịch vụ thành công!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     </c:if>
     <c:if test="${param.success == 'updated'}">
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show mt-3">
             <i class="fas fa-check-circle"></i> Cập nhật dịch vụ thành công!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     </c:if>
     <c:if test="${param.success == 'deleted'}">
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show mt-3">
             <i class="fas fa-check-circle"></i> Xóa dịch vụ thành công!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     </c:if>
     <c:if test="${param.error == 'deletefailed'}">
-        <div class="alert alert-danger alert-dismissible fade show">
+        <div class="alert alert-danger alert-dismissible fade show mt-3">
             <i class="fas fa-exclamation-circle"></i> Không thể xóa dịch vụ!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     </c:if>
 
-    <!-- Search Form -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="get" action="${pageContext.request.contextPath}/admin/services" class="row g-3">
-                <div class="col-md-10">
-                    <input type="text" name="keyword" class="form-control"
-                           placeholder="Tìm kiếm theo tên dịch vụ hoặc bác sĩ..."
-                           value="${keyword}">
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-search"></i> Tìm kiếm
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Services Table -->
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-body">
             <c:if test="${empty services}">
                 <div class="alert alert-info">
@@ -110,14 +138,16 @@
                         </tbody>
                     </table>
                 </div>
-                <a href="/view/admin/dashboard.jsp"
-                   class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Quay lại
-                </a>
             </c:if>
         </div>
     </div>
+
 </div>
+
+<a href="${pageContext.request.contextPath}/view/admin/dashboard.jsp"
+   class="btn btn-secondary back-fixed">
+    <i class="fas fa-arrow-left"></i> Quay lại
+</a>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>

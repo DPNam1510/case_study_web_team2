@@ -32,7 +32,7 @@ public class AdminMedicalFormsRepo implements IAdminMedicalFormsRepo{
                     "ORDER BY mf.id";
 
     private final String UPDATE_STATUS = "UPDATE medical_forms SET status = ? WHERE id = ?";
-    private final String DELETE_BY_ID = "delete from medical_forms where id = ?";
+    private final String DELETE_BY_ID = "delete  from medical_forms where id = ?";
     @Override
     public List<AdminMedicalFormsDto> getAll() {
         List<AdminMedicalFormsDto> adminMedicalFormsDtoList = new ArrayList<>();

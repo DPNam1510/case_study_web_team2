@@ -77,7 +77,7 @@ public class Customer {
     public Boolean getGender() { return gender; }
     public void setGender(Boolean gender) { this.gender = gender; }
     // ✅ giữ thêm isGender() để code/JSP cũ không vỡ nếu đang dùng
-    public boolean isGender() { return gender != null && gender; }
+//    public boolean isGender() { return gender != null && gender; }
 
     public LocalDate getBirthday() { return birthday; }
     public void setBirthday(LocalDate birthday) { this.birthday = birthday; }

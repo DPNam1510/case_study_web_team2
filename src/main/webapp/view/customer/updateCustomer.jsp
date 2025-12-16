@@ -36,8 +36,6 @@
         <div class="card-body">
             <form method="post" action="<c:url value="/customers"/>">
                 <input type="hidden" name="action" value="update">
-                <input type="hidden" name="id" value="${customer.id}">
-                <input type="hidden" name="customer_type_id" value="${customer.customerTypeId}">
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Username</label>
