@@ -73,7 +73,7 @@ public class CustomerRepository implements ICustomerRepository {
             preparedStatement.setString(1, customer.getUsername());
             preparedStatement.setInt(2, customer.getCustomerTypeId());
             preparedStatement.setString(3, customer.getName());
-            preparedStatement.setBoolean(4, customer.isGender());
+//            preparedStatement.setBoolean(4, customer.isGender());
             preparedStatement.setDate(5, Date.valueOf(customer.getBirthday()));
             preparedStatement.setString(6, customer.getEmail());
             preparedStatement.setString(7, customer.getPhone());
