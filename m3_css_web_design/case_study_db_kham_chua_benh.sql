@@ -190,6 +190,8 @@ INSERT INTO forms_detail(id, forms_id, service_id, diagnosis_terminology, prescr
 (14, 14, 14, 'Đau tim', 'Thuốc tim mạch', 100000, '2024-11-07 09:45:00'),
 (15, 15, 15, 'Đau đầu nặng', 'Thuốc giảm đau mạnh', 90000, '2025-03-12 11:00:00');
 
+INSERT INTO forms_detail(id, forms_id, service_id, diagnosis_terminology, prescription, prescription_price, date_time) VALUES
+(16, 16, 12, 'Sốt nhẹ', 'Paracetamol', 40000, '2025-12-16 09:20:00');
 
 INSERT INTO pay_type(name) VALUES
 ('Cash'),
@@ -252,9 +254,16 @@ INSERT INTO orders_detail(id, orders_id, supplements_id, quantity, date_time) VA
 INSERT INTO medical_forms(id, customer_id, date_time, appointment_time, status) VALUES
 (16, 16, '2025-12-16', '2025-12-16 09:00:00', 'Pending');
 
-select sv.*,c.username as username
-from service sv
-join forms_detail fd on sv.id = fd.service_id
-join medical_forms mf on fd.forms_id = mf.id
-join customer c on mf.customer_id = c.id;
+select c.id,c.username,s.name,s.doctor_name
+from customer c
+join medical_forms mf on c.id = mf.customer_id
+join forms_detail fd on mf.id = fd.forms_id
+join service s on s.id = fd.service_id
+order by c.id;
 
+select mf.id as forms_id,c.name,s.name,s.doctor_name 
+from medical_forms mf
+join customer c on mf.customer_id = c.id
+join forms_detail fd on mf.id = fd.forms_id
+join service s on fd.service_id = s.id
+order by mf.id;
