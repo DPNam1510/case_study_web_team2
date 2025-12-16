@@ -1,85 +1,95 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: dpnbh
-  Date: 14/12/2025
-  Time: 2:55 CH
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer List</title>
+    <title>Thông tin cá nhân</title>
 
-    <!-- Bootstrap + FontAwesome (đồng bộ style) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body{ background:#f6f7fb; }
-        .page-title{ font-weight:800; letter-spacing:.2px; }
-        .card{ border-radius:14px; }
-        .btn, .form-control, .form-select{ border-radius:12px; }
-        .table thead th{ white-space:nowrap; }
+        body { background:#f6f7fb; }
+        .page-title { font-weight:800; }
+        .card { border-radius:16px; }
+        .info-label { color:#6c757d; font-size:14px; }
+        .info-value { font-weight:600; font-size:16px; }
     </style>
 </head>
+
 <body>
-<div class="container py-4">
+<div class="container py-4" style="max-width: 900px">
 
-    <h2 class="page-title mb-3 text-center">
-        <i class="fa-solid fa-users"></i> Danh sách khách hàng
-    </h2>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title mb-0">
+            <i class="fa-solid fa-user"></i> Thông tin cá nhân
+        </h2>
 
+        <a href="<c:url value='/customers?action=update'/>"
+           class="btn btn-primary">
+            <i class="fa-solid fa-user-pen"></i> Cập nhật
+        </a>
+    </div>
+
+    <!-- Message -->
     <c:if test="${param.message != null}">
         <div class="alert alert-success text-center">
-            <i class="fa-solid fa-circle-check"></i> ${param.message}
+            <i class="fa-solid fa-circle-check"></i>
+            Cập nhật thông tin thành công
         </div>
     </c:if>
 
-    <div class="card">
+    <!-- Info Card -->
+    <div class="card shadow-sm">
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" border="1" cellpadding="8">
-                    <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Họ tên</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                    </thead>
+            <div class="row g-4">
 
-                    <tbody>
-                    <c:forEach items="${customerList}" var="c">
-                        <tr>
-                            <td>${c.id}</td>
-                            <td>${c.userName}</td>
-                            <td>${c.name}</td>
-                            <td>${c.email}</td>
-                            <td>${c.phone}</td>
-                            <td class="text-center">
-                                <a class="btn btn-sm btn-primary"
-                                   href="<c:url value="/customers?action=update&id=${c.id}"/>">
-                                    <i class="fa-solid fa-pen-to-square"></i> Cập nhật
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
+                <div class="col-md-6">
+                    <div class="info-label">Username</div>
+                    <div class="info-value">${customer.userName}</div>
+                </div>
 
-                    <c:if test="${empty customerList}">
-                        <tr>
-                            <td colspan="6" class="text-center text-muted fst-italic">
-                                Không có dữ liệu
-                            </td>
-                        </tr>
-                    </c:if>
-                    </tbody>
-                </table>
+                <div class="col-md-6">
+                    <div class="info-label">Họ tên</div>
+                    <div class="info-value">${customer.name}</div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="info-label">Giới tính</div>
+                    <div class="info-value">
+                        <c:choose>
+                            <c:when test="${customer.gender}">Nam</c:when>
+                            <c:otherwise>Nữ</c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="info-label">Ngày sinh</div>
+                    <div class="info-value">
+                        <fmt:formatDate value="${customer.birthday}" pattern="dd/MM/yyyy"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">${customer.email}</div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="info-label">Số điện thoại</div>
+                    <div class="info-value">${customer.phone}</div>
+                </div>
+
+                <div class="col-12">
+                    <div class="info-label">Địa chỉ</div>
+                    <div class="info-value">${customer.address}</div>
+                </div>
+
             </div>
         </div>
     </div>

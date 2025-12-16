@@ -5,8 +5,8 @@ import com.example.case_study_hnh.entity.Customer;
 import java.util.List;
 
 public interface ICustomerService {
-    List<Customer> findAll();
-    Customer findById(int id);
+    Customer findByUsername(String username);
 
     boolean update(Customer customer);
+
 }

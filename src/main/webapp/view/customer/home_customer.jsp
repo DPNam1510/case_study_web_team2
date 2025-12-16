@@ -9,68 +9,47 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>HOSPITAL</title>
     <c:import url="/layout/library.jsp"/>
     <link rel="stylesheet" href="<c:url value="/assets/css/home.css"/>">
 </head>
 <body>
-<!-- HEADER -->
-<header>
-    <div class="logo">PHÒNG KHÁM TƯ NHÂN</div>
-    <div class="menu-btn">☰</div>
-    <nav>
-        <ul>
-            <li><a href="case_study.html">Trang chủ</a></li>
-            <li class="dropdown">
-                <a href="#">Dịch vụ ▾</a>
 
-                <ul class="dropdown-menu">
-                    <li><a href="serviceList.jsp">Khám chữa bệnh</a></li>
-                    <li><a href="">Thuốc kê đơn</a></li>
-<%--                    tao bang formsDetail--%>
-                </ul>
-            </li>
-            <li><a href="">Thực phẩm chức năng</a></li>
-<%--            tao bang dietarySupplement--%>
-            <li><a href="<c:url value="/view/auth/login.jsp"/>" class="login-btn">Đăng nhập</a></li>
-        </ul>
-    </nav>
-</header>
+<c:import url="/layout/customerHeader.jsp"/>
 
-<!-- HERO -->
-<section class="hero fade">
+<section class="hero">
     <div class="hero-content">
-        <h1>Chăm sóc sức khỏe tận tâm</h1>
-        <p>Đội ngũ bác sĩ giàu kinh nghiệm – Trang thiết bị hiện đại</p>
-        <a href="<c:url value="/view/customer/addMedicalForm.jsp"/>" class="btn">Đăng ký khám ngay</a>
+        <h1>Xin chào, ${sessionScope.customer.name}</h1>
+        <p>Chăm sóc sức khỏe toàn diện cho bạn</p>
+        <a href="<c:url value='/medicalForms?action=add'/>" class="btn">
+            Đăng ký khám ngay
+        </a>
     </div>
 </section>
 
-<!-- SERVICES -->
-<section class="services fade">
-    <h2>Dịch Vụ Nổi Bật</h2>
+<section class="services">
+    <h2>Chức năng dành cho bạn</h2>
+
     <div class="service-box">
         <div class="service-item">
-            <h3>Khám tổng quát</h3>
-            <p>Kiểm tra sức khỏe chuyên sâu.</p>
+            <h3>Dịch vụ khám</h3>
+            <p>Xem & tìm dịch vụ khám chữa bệnh</p>
+            <a href="<c:url value="/services"/>">Xem</a>
         </div>
+
         <div class="service-item">
-            <h3>Khám nội khoa</h3>
-            <p>Chẩn đoán và điều trị bệnh nội khoa.</p>
+            <h3>Đơn khám</h3>
+            <p>Đăng ký & theo dõi lịch khám</p>
+            <a href="<c:url value="/medicalForms"/>">Xem</a>
         </div>
+
         <div class="service-item">
-            <h3>Xét nghiệm</h3>
-            <p>Hơn 50 loại xét nghiệm nhanh chóng.</p>
+            <h3>Đơn hàng</h3>
+            <p>Đặt & theo dõi thực phẩm chức năng</p>
+            <a href="<c:url value="/orders"/>">Xem</a>
         </div>
     </div>
 </section>
-
-<!-- FOOTER -->
-<footer>
-    <p>© 2025 Phòng khám tư nhân. All Rights Reserved.</p>
-    <p>Địa chỉ: Tam Kỳ - Quảng Nam</p>
-    <p>Hotline: 0123 456 789</p>
-</footer>
-<script src="<c:url value="/assets/js/home.js"/>"></script>
 </body>
 </html>

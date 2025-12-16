@@ -1,5 +1,6 @@
 package com.example.case_study_hnh.controller.user;
 
+import com.example.case_study_hnh.entity.Account;
 import com.example.case_study_hnh.entity.Customer;
 import com.example.case_study_hnh.service.CustomerService;
 import com.example.case_study_hnh.service.ICustomerService;
@@ -11,78 +12,73 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
+
 
 @WebServlet(name = "CustomerController", urlPatterns = "/customers")
 public class CustomerController extends HttpServlet {
-    //    Xem & sửa thông tin cá nhân
+
     private final ICustomerService customerService = new CustomerService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        Account account = (Account) request.getSession().getAttribute("account");
+        if (account == null) {
+            response.sendRedirect("/login");
+            return;
+        }
+
         String action = request.getParameter("action");
-        if (action == null) action = "";
-        switch (action) {
-            case "update":
-                showFormUpdate(request, response);
-                break;
-            default:
-                showListForm(request, response);
-                break;
+        if ("update".equals(action)) {
+            showUpdateForm(request, response, account);
+        } else {
+            showProfile(request, response, account);
         }
     }
 
-    private void showListForm(HttpServletRequest request, HttpServletResponse response) {
-        List<Customer> customerList = customerService.findAll();
-        request.setAttribute("customerList", customerList);
-        try {
-            request.getRequestDispatcher("/view/customer/customerList.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private void showProfile(HttpServletRequest request, HttpServletResponse response, Account account)
+            throws ServletException, IOException {
 
-    private void showFormUpdate(HttpServletRequest request, HttpServletResponse response) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Customer customer = customerService.findById(id);
+        Customer customer = customerService.findByUsername(account.getUsername());
         request.setAttribute("customer", customer);
-        try {
-            request.getRequestDispatcher("/view/customer/updateCustomer.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        request.getRequestDispatcher("/view/customer/customerList.jsp").forward(request, response);
     }
+
+    private void showUpdateForm(HttpServletRequest request, HttpServletResponse response, Account account)
+            throws ServletException, IOException {
+
+        Customer customer = customerService.findByUsername(account.getUsername());
+        request.setAttribute("customer", customer);
+        request.getRequestDispatcher("/view/customer/updateCustomer.jsp").forward(request, response);
+    }
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String action = request.getParameter("action");
-        if (action == null) action = "";
-        switch (action) {
-            case "update":
-                updateCustomer(request, response);
-                break;
-            default:
-                response.sendRedirect("/customers");
-        }
-    }
-    protected void updateCustomer(HttpServletRequest request, HttpServletResponse response) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String userName = request.getParameter("userName");
-        int customerTypeId = Integer.parseInt(request.getParameter("customer_type_id"));
-        String name = request.getParameter("name");
-        boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-        LocalDate birthday = LocalDate.parse(request.getParameter("birthday"));
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        Customer customer = new Customer(id, userName, customerTypeId, name, gender, birthday, email, phone, address);
-        boolean result = customerService.update(customer);
-        String message = result ? "success" : "fail";
-        try {
-            response.sendRedirect("/customers?message="+message);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        Account account = (Account) request.getSession().getAttribute("account");
+        if (account == null) {
+            response.sendRedirect("/login");
+            return;
         }
 
+        Customer oldCustomer = customerService.findByUsername(account.getUsername());
 
+        Customer customer = new Customer(
+                oldCustomer.getId(),
+                oldCustomer.getUsername(),
+                oldCustomer.getCustomerTypeId(),
+                request.getParameter("name"),
+                Boolean.parseBoolean(request.getParameter("gender")),
+                LocalDate.parse(request.getParameter("birthday")),
+                request.getParameter("email"),
+                request.getParameter("phone"),
+                request.getParameter("address")
+        );
+
+        customerService.update(customer);
+        response.sendRedirect("/customers?message=success");
     }
 }
+
