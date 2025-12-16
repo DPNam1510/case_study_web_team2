@@ -285,7 +285,11 @@
                            href="${pageContext.request.contextPath}/admin/services">
                             <i class="fas fa-list me-1"></i> Danh sách dịch vụ
                         </a>
-                        <a class="btn btn-outline-success btn-round"
+                        <a class="btn btn-success"
+                           href="/admin-registered-service">
+                            <i class="fas fa-list"></i> Dịch vụ đã được đăng ký
+                        </a>
+                        <a class="btn btn-outline-success"
                            href="${pageContext.request.contextPath}/admin/services?action=create">
                             <i class="fas fa-plus me-1"></i> Thêm dịch vụ mới
                         </a>
@@ -293,7 +297,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="text-center text-muted mini mt-4">
