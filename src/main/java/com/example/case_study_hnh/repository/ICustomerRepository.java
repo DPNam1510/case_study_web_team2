@@ -6,7 +6,7 @@ import com.example.case_study_hnh.entity.Customer;
 import java.util.List;
 
 public interface ICustomerRepository {
-    List<Customer> findAll();
+    Customer findByUsername(String username);
 
     Customer findById(int id);
 

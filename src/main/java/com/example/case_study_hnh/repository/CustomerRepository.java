@@ -1,12 +1,7 @@
-
 package com.example.case_study_hnh.repository;
 
 import com.example.case_study_hnh.entity.Customer;
 import com.example.case_study_hnh.util.ConnectDB;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -17,29 +12,31 @@ public class CustomerRepository implements ICustomerRepository {
             " birthday=?, email=?, phone=?, address=? WHERE id=?";
 
     @Override
-    public List<Customer> findAll() {
-        List<Customer> customerList = new ArrayList<>();
+    public Customer findByUsername(String username) {
         try (Connection connection = ConnectDB.getConnectDB()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_CUSTOMER);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String userName = resultSet.getString("username");
-                int customerTypeId = resultSet.getInt("customerTypeId");
-                String name = resultSet.getString("name");
-                boolean gender = resultSet.getBoolean("gender");
-                LocalDate birthday = resultSet.getDate("birthday").toLocalDate();
-                String email = resultSet.getString("email");
-                String phone = resultSet.getString("phone");
-                String address = resultSet.getString("address");
-                Customer customer = new Customer(id, userName, customerTypeId, name, gender, birthday, email, phone, address);
-                customerList.add(customer);
+            PreparedStatement ps = connection.prepareStatement(FIND_BY_USERNAME);
+            ps.setString(1, username);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Customer(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getInt("customer_type_id"),
+                        rs.getString("name"),
+                        rs.getBoolean("gender"),
+                        rs.getDate("birthday").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address")
+                );
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return customerList;
+        return null;
     }
+
 
     @Override
     public Customer findById(int id) {
@@ -73,12 +70,11 @@ public class CustomerRepository implements ICustomerRepository {
             preparedStatement.setString(1, customer.getUsername());
             preparedStatement.setInt(2, customer.getCustomerTypeId());
             preparedStatement.setString(3, customer.getName());
-//            preparedStatement.setBoolean(4, customer.isGender());
-            preparedStatement.setDate(5, Date.valueOf(customer.getBirthday()));
-            preparedStatement.setString(6, customer.getEmail());
-            preparedStatement.setString(7, customer.getPhone());
-            preparedStatement.setString(8, customer.getAddress());
-            preparedStatement.setInt(9, customer.getId());
+            preparedStatement.setDate(4, Date.valueOf(customer.getBirthday()));
+            preparedStatement.setString(5, customer.getEmail());
+            preparedStatement.setString(6, customer.getPhone());
+            preparedStatement.setString(7, customer.getAddress());
+            preparedStatement.setInt(8, customer.getId());
             isSuccess = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
