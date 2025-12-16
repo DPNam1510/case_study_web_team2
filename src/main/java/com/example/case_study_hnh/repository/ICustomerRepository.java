@@ -8,5 +8,7 @@ import java.util.List;
 public interface ICustomerRepository {
     Customer findByUsername(String username);
 
+    Customer findById(int id);
+
     boolean update(Customer customer);
 }
