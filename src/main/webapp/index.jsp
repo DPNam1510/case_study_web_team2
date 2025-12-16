@@ -12,7 +12,7 @@
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
-<c:redirect url="view/home.jsp"/>
+<c:redirect url="login"/>
 </h1>
 <br/>
 <a href="hello-servlet">Hello Team 2</a>

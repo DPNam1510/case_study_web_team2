@@ -13,17 +13,26 @@ import java.util.List;
 
 public class AdminMedicalFormsRepo implements IAdminMedicalFormsRepo{
 
-    private final String REGISTERED_CHECK = "SELECT mf.id as forms_id, c.name as customer_name, s.name as service_name, s.doctor_name, mf.status " +
-            "FROM medical_forms mf " +
-            "JOIN customer c ON mf.customer_id = c.id " +
-            "JOIN forms_detail fd ON mf.id = fd.forms_id " +
-            "JOIN service s ON fd.service_id = s.id " +
-            "WHERE c.name IS NOT NULL AND c.gender IS NOT NULL AND c.birthday IS NOT NULL " +
-            "AND c.email IS NOT NULL AND c.phone IS NOT NULL AND c.address IS NOT NULL " +
-            "ORDER BY mf.id;";
+    private final String REGISTERED_CHECK =
+            "SELECT mf.id AS forms_id, " +
+                    "c.name AS customer_name, " +
+                    "s.name AS service_name, " +
+                    "s.doctor_name AS doctor_name, " +
+                    "mf.status AS status " +
+                    "FROM medical_forms mf " +
+                    "JOIN customer c ON mf.customer_id = c.id " +
+                    "JOIN forms_detail fd ON mf.id = fd.forms_id " +
+                    "JOIN service s ON fd.service_id = s.id " +
+                    "WHERE c.name IS NOT NULL " +
+                    "AND c.gender IS NOT NULL " +
+                    "AND c.birthday IS NOT NULL " +
+                    "AND c.email IS NOT NULL " +
+                    "AND c.phone IS NOT NULL " +
+                    "AND c.address IS NOT NULL " +
+                    "ORDER BY mf.id";
 
     private final String UPDATE_STATUS = "UPDATE medical_forms SET status = ? WHERE id = ?";
-    private final String DELETE_BY_ID = "delete * from medical_forms where id = ?";
+    private final String DELETE_BY_ID = "delete from medical_forms where id = ?";
     @Override
     public List<AdminMedicalFormsDto> getAll() {
         List<AdminMedicalFormsDto> adminMedicalFormsDtoList = new ArrayList<>();
@@ -35,8 +44,8 @@ public class AdminMedicalFormsRepo implements IAdminMedicalFormsRepo{
                 int id = resultSet.getInt("forms_id");
                 String customerName = resultSet.getString("customer_name");
                 String serviceName = resultSet.getString("service_name");
-                String doctorName = resultSet.getString("s.doctor_name");
-                String status = resultSet.getString("mf.status");
+                String doctorName = resultSet.getString("doctor_name");
+                String status = resultSet.getString("status");
                 AdminMedicalFormsDto adminMedicalFormsDto = new AdminMedicalFormsDto(id,customerName,serviceName,doctorName,status);
                 adminMedicalFormsDtoList.add(adminMedicalFormsDto);
             }
@@ -71,6 +80,4 @@ public class AdminMedicalFormsRepo implements IAdminMedicalFormsRepo{
             e.printStackTrace();
         }
     }
-
-
 }
