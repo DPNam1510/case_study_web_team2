@@ -61,7 +61,7 @@
                                     <i class="fa-solid fa-eye"></i> Chi tiết
                                 </a>
                                 <a class="btn btn-sm btn-danger"
-                                   href="<c:url value="/orders?action=delete&id=${o.id}"/>"
+                                   href="<c:url value="home_customer.jsp"/>"
                                    onclick="return confirm('Hủy đơn hàng?')">
                                     <i class="fa-solid fa-trash"></i> Hủy
                                 </a>

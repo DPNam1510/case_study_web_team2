@@ -6,6 +6,12 @@ import java.util.List;
 
 public interface IAdminMedicalFormsService {
     List<AdminMedicalFormsDto> getAll();
+    List<AdminMedicalFormsDto> getList();
+    List<AdminMedicalFormsDto> getListRejected();
     boolean delete(int id);
-    void updateStatus(int formId, String status);
+    boolean approve(int formId);
+    boolean reject(int formId);
+    List<AdminMedicalFormsDto> searchApprove (String searchName, String searchService);
+    List<AdminMedicalFormsDto> searchPending (String searchName, String searchService);
+    List<AdminMedicalFormsDto> searchReject (String searchName, String searchService);
 }

@@ -267,3 +267,49 @@ join customer c on mf.customer_id = c.id
 join forms_detail fd on mf.id = fd.forms_id
 join service s on fd.service_id = s.id
 order by mf.id;
+
+
+select * from medical_forms where status = 'pending';
+
+select id from customer where 
+username is not null and
+customer_type_id is not null and
+name is not null and
+gender is not null and
+birthday is not null and 
+email is not null and
+phone is not null and 
+address is not null
+;
+
+update medical_forms mf set mf.status = 'Approve'
+where mf.status = 'Pending'
+and exists (select 1 from customer c
+where mf.customer_id = c.id and
+c.username is not null and
+c.customer_type_id is not null and
+c.name is not null and
+c.gender is not null and
+c.birthday is not null and 
+c.email is not null and
+c.phone is not null and 
+c.address is not null)
+;
+
+
+select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
+from medical_forms mf
+join customer c on mf.customer_id = c.id
+join forms_detail fd on mf.id = fd.forms_id
+join service s on fd.service_id = s.id
+where status = 'completed' and c.name like '%ha%' and s.name like '%ye%'
+order by mf.id;
+ALTER TABLE forms_detail
+DROP FOREIGN KEY forms_detail_ibfk_1;
+ALTER TABLE forms_detail
+ADD CONSTRAINT forms_detail_ibfk_1
+FOREIGN KEY (forms_id) REFERENCES medical_forms(id)
+ON DELETE CASCADE;
+
+
+

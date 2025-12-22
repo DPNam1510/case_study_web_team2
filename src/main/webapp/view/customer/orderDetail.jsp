@@ -34,7 +34,7 @@
 
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
         <h2 class="page-title mb-0"><i class="fa-solid fa-file-invoice"></i> Chi tiết đơn hàng</h2>
-        <a class="btn btn-outline-secondary" href="<c:url value="/orders"/>">
+        <a class="btn btn-outline-secondary" href="<c:url value="home_customer.jsp"/>">
             <i class="fa-solid fa-arrow-left"></i> Quay lại
         </a>
     </div>

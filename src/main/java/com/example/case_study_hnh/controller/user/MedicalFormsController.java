@@ -44,7 +44,7 @@ public class MedicalFormsController extends HttpServlet {
         List<MedicalForms> medicalFormsList = medicalFormsService.findByCustomer(customer.getId());
         request.setAttribute("medicalFormsList", medicalFormsList);
         try {
-            request.getRequestDispatcher("/view/medical/medicalList.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/customer/medicalList.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,7 +52,7 @@ public class MedicalFormsController extends HttpServlet {
 
     private void showAddForm(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.getRequestDispatcher("/view/medical/addMedicalForm.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/customer/addMedicalForm.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             throw new RuntimeException(e);
         }

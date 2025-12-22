@@ -130,7 +130,7 @@
 
                 <div class="d-flex flex-wrap gap-2">
                     <a class="btn btn-light btn-round btn-wide"
-                       href="${pageContext.request.contextPath}/view/home.jsp">
+                       href="/home">
                         <i class="fas fa-house me-1"></i> Trang chủ
                     </a>
 
