@@ -13,4 +13,8 @@ public class CheckValidate {
         String regexPass = "^\\w+(\\w+)*$";
         return pass.matches(regexPass);
     }
+    public static boolean checkCusName(String regex){
+        String regexName = "^\\p{L}+(\\s\\p{L}+)*$";
+        return regex.matches(regexName);
+    }
 }

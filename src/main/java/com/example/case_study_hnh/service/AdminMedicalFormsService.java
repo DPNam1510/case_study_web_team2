@@ -14,13 +14,51 @@ public class AdminMedicalFormsService implements IAdminMedicalFormsService{
     }
 
     @Override
+    public List<AdminMedicalFormsDto> getList() {
+        return  adminMedicalFormsRepo.getList();
+    }
+
+    @Override
+    public List<AdminMedicalFormsDto> getListRejected() {
+        return adminMedicalFormsRepo.getListRejected();
+    }
+
+    @Override
     public boolean delete(int id) {
         return adminMedicalFormsRepo.delete(id);
     }
 
     @Override
-    public void updateStatus(int formId, String status) {
-        adminMedicalFormsRepo.updateStatus(formId,status);
+    public boolean approve(int formId) {
+        int customerId = adminMedicalFormsRepo.getCustomerIdByFormId(formId);
+        if (customerId == -1) return false;
+
+        if (!adminMedicalFormsRepo.isCustomerInfoComplete(customerId)) {
+            return false;
+        }
+
+        return adminMedicalFormsRepo.approve(formId);
     }
+
+    @Override
+    public boolean reject(int formId) {
+        return adminMedicalFormsRepo.reject(formId);
+    }
+
+    @Override
+    public List<AdminMedicalFormsDto> searchApprove(String searchName, String searchService) {
+        return adminMedicalFormsRepo.searchApprove(searchName,searchService);
+    }
+
+    @Override
+    public List<AdminMedicalFormsDto> searchPending(String searchName, String searchService) {
+        return adminMedicalFormsRepo.searchPending(searchName,searchService);
+    }
+
+    @Override
+    public List<AdminMedicalFormsDto> searchReject(String searchName, String searchService) {
+        return adminMedicalFormsRepo.searchReject(searchName,searchService);
+    }
+
 
 }

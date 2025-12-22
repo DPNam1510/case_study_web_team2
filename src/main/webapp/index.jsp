@@ -9,16 +9,13 @@
 <html>
 <head>
     <title>HOSPITAL</title>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
-<c:redirect url="view/home.jsp"/>
 </h1>
 <br/>
-<a href="hello-servlet">Hello Team 2</a>
 <h1><%= "Hello World!" %>
 </h1>
 <br/>
-<a href="hello-servlet">Hello Team 2</a>
+<a href="/home">Hello Team 2</a>
 </body>
 </html>

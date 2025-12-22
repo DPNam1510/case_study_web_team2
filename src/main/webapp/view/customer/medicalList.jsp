@@ -59,7 +59,7 @@
                             <td>${m.status}</td>
                             <td class="text-center">
                                 <a class="btn btn-sm btn-danger"
-                                   href="<c:url value="/medicalForms?action=delete&id=${m.id}"/>"
+                                   href="<c:url value="home_customer.jsp"/>"
                                    onclick="return confirm('Hủy đơn khám?')">
                                     <i class="fa-solid fa-trash"></i> Hủy
                                 </a>
