@@ -47,7 +47,7 @@
                     <button type="submit" class="btn btn-primary flex-fill">
                         <i class="fa-solid fa-plus"></i> Tạo đơn
                     </button>
-                    <a class="btn btn-outline-secondary flex-fill" href="<c:url value="home_customer.jsp">
+                    <a class="btn btn-outline-secondary flex-fill" href="<c:url value="home_customer.jsp"/>">
                         Quay lại
                     </a>
                 </div>

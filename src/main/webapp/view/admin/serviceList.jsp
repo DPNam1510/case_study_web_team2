@@ -144,7 +144,7 @@
 
 </div>
 
-<a href="${pageContext.request.contextPath}/view/admin/dashboard.jsp"
+<a href="/home-admin"
    class="btn btn-secondary back-fixed">
     <i class="fas fa-arrow-left"></i> Quay lại
 </a>
