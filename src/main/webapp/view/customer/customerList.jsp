@@ -42,89 +42,65 @@
             Cập nhật thông tin thành công
         </div>
     </c:if>
-    <table class="table table-bordered">
-        <tr>
-            <th>Username</th>
-            <th>Customer Type</th>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Birthday</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-        </tr>
+    <!-- Info Card -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row g-4">
 
-        <tr>
-            <td>${customer.username}</td>
-            <td>${customer.customerTypeName}</td>
-            <td>${customer.name}</td>
-            <td>
-                <c:choose>
-                    <c:when test="${customer.gender}">Nam</c:when>
-                    <c:otherwise>Nữ</c:otherwise>
-                </c:choose>
-            </td>
-            <td>${customer.birthday}</td>
-            <td>${customer.email}</td>
-            <td>${customer.phone}</td>
-            <td>${customer.address}</td>
-        </tr>
-    </table>
+                <div class="col-md-6">
+                    <div class="info-label">Username</div>
+                    <div class="info-value">${customer.username}</div>
+                </div>
 
+                <div class="col-md-6">
+                    <div class="info-label">Loại khách hàng</div>
+                    <div class="info-value">${customer.customerTypeName}</div>
+                </div>
 
+                <div class="col-md-6">
+                    <div class="info-label">Họ tên</div>
+                    <div class="info-value">${customer.name}</div>
+                </div>
 
-<%--    <!-- Info Card -->--%>
-<%--    <div class="card shadow-sm">--%>
-<%--        <div class="card-body">--%>
-<%--            <div class="row g-4">--%>
+                <div class="col-md-6">
+                    <div class="info-label">Giới tính</div>
+                    <div class="info-value">
+                        <c:choose>
+                            <c:when test="${customer.gender}">Nam</c:when>
+                            <c:otherwise>Nữ</c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
 
-<%--                <div class="col-md-6">--%>
-<%--                    <div class="info-label">Username</div>--%>
-<%--                    <div class="info-value">${userName}</div>--%>
-<%--                </div>--%>
+                <div class="col-md-6">
+                    <div class="info-label">Ngày sinh</div>
+                    <div class="info-value">
+                        <c:if test="${customer.birthday != null}">
+                            <fmt:formatDate value="${customer.birthday}" pattern="dd/MM/yyyy"/>
+                        </c:if>
+                    </div>
+                </div>
 
-<%--                <div class="col-md-6">--%>
-<%--                    <div class="info-label">Họ tên</div>--%>
-<%--                    <div class="info-value">${name}</div>--%>
-<%--                </div>--%>
+                <div class="col-md-6">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">${customer.email}</div>
+                </div>
 
-<%--                <div class="col-md-6">--%>
-<%--                    <div class="info-label">Giới tính</div>--%>
-<%--                    <div class="info-value">--%>
-<%--                        <c:choose>--%>
-<%--                            <c:when test="${customer.gender}">Nam</c:when>--%>
-<%--                            <c:otherwise>Nữ</c:otherwise>--%>
-<%--                        </c:choose>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
+                <div class="col-md-6">
+                    <div class="info-label">Số điện thoại</div>
+                    <div class="info-value">${customer.phone}</div>
+                </div>
 
-<%--                <div class="col-md-6">--%>
-<%--                    <div class="info-label">Ngày sinh</div>--%>
-<%--                    <div class="info-value">--%>
-<%--                        <fmt:formatDate value="${birthday}" pattern="dd/MM/yyyy"/>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
+                <div class="col-12">
+                    <div class="info-label">Địa chỉ</div>
+                    <div class="info-value">${customer.address}</div>
+                </div>
 
-<%--                <div class="col-md-6">--%>
-<%--                    <div class="info-label">Email</div>--%>
-<%--                    <div class="info-value">${customer.email}</div>--%>
-<%--                </div>--%>
+            </div>
+        </div>
+    </div>
 
-<%--                <div class="col-md-6">--%>
-<%--                    <div class="info-label">Số điện thoại</div>--%>
-<%--                    <div class="info-value">${customer.phone}</div>--%>
-<%--                </div>--%>
-
-<%--                <div class="col-12">--%>
-<%--                    <div class="info-label">Địa chỉ</div>--%>
-<%--                    <div class="info-value">${customer.address}</div>--%>
-<%--                </div>--%>
-
-<%--            </div>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-
-<%--</div>--%>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
