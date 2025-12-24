@@ -20,7 +20,9 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String username, String customerTypeName, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
+
+    public Customer(int id, String username, String customerTypeName, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
+        this.id=id;
         this.username = username;
         this.customerTypeName = customerTypeName;
         this.name = name;
@@ -32,8 +34,7 @@ public class Customer {
 
     }
 
-    public Customer(int id, String username, int customerTypeId, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
-        this.id = id;
+    public Customer(String username,int customerTypeId, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
         this.username = username;
         this.customerTypeId = customerTypeId;
         this.name = name;
@@ -75,6 +76,18 @@ public class Customer {
         this.role = role;
     }
 
+    public Customer(int id, String username, int customerTypeId, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
+        this.id = id;
+        this.username = username;
+        this.customerTypeId = customerTypeId;
+        this.name = name;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
+
     public int getId() {
         return id;
     }
@@ -91,13 +104,7 @@ public class Customer {
         this.username = username;
     }
 
-    public int getCustomerTypeId() {
-        return customerTypeId;
-    }
 
-    public void setCustomerTypeId(int customerTypeId) {
-        this.customerTypeId = customerTypeId;
-    }
 
     public String getName() {
         return name;
@@ -165,6 +172,13 @@ public class Customer {
         this.role = role;
     }
 
+    public int getCustomerTypeId() {
+        return customerTypeId;
+    }
+
+    public void setCustomerTypeId(int customerTypeId) {
+        this.customerTypeId = customerTypeId;
+    }
     public String getCustomerTypeName() {
         return customerTypeName;
     }

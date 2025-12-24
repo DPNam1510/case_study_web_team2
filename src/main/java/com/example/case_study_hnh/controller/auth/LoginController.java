@@ -57,6 +57,7 @@ public class LoginController extends HttpServlet {
         }
 
         req.getSession().setAttribute("account", account);
+        req.getSession().setAttribute("username", account.getUsername());
 
         if ("admin".equalsIgnoreCase(account.getRole())) {
             resp.sendRedirect(req.getContextPath()+"/home-admin");

@@ -19,10 +19,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body{ background:#f6f7fb; }
-        .page-title{ font-weight:800; letter-spacing:.2px; }
-        .card{ border-radius:14px; }
-        .btn, .form-control, .form-select{ border-radius:12px; }
+        body {
+            background: #f6f7fb;
+        }
+
+        .page-title {
+            font-weight: 800;
+            letter-spacing: .2px;
+        }
+
+        .card {
+            border-radius: 14px;
+        }
+
+        .btn, .form-control, .form-select {
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body>
@@ -34,14 +46,25 @@
 
     <div class="card">
         <div class="card-body">
-            <form method="post" action="<c:url value="/customers"/>">
+            <form method="post" action="<c:url value="${pageContext.request.contextPath}/customers"/>">
                 <input type="hidden" name="action" value="update">
-
+                <input type="hidden" name="id" value="${customer.id}">
                 <div class="mb-3">
                     <label class="form-label fw-bold">Username</label>
-                    <input class="form-control" type="text" name="userName" value="${customer.userName}" readonly>
+                    <input class="form-control" type="text" name="username" value="${customer.username}" readonly>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Type Customer</label>
+                    <select class="form-select" name="customerTypeId">
+                        <c:forEach var="ct" items="${customerTypeList}">
+                            <option value="${ct.id}"
+                                ${ct.name == customer.customerTypeName ? "selected" : ""}>
+                                    ${ct.name}
+                            </option>
+                        </c:forEach>
+                    </select>
 
+                </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Họ tên</label>
                     <input class="form-control" type="text" name="name" value="${customer.name}" required>
