@@ -30,6 +30,12 @@ public class RegisteredServiceController extends HttpServlet {
             case "rejected":
                 showListRejected(req,resp);
                 break;
+            case "pay_not_yet":
+                showListPayNotYet(req,resp);
+                break;
+            case "search_pay_not_yet":
+                searchPayNotYet(req,resp);
+                break;
             case "search_complete":
                 searchComplete(req,resp);
                 break;
@@ -44,6 +50,8 @@ public class RegisteredServiceController extends HttpServlet {
                 break;
         }
     }
+
+
 
     private void searchReject(HttpServletRequest req, HttpServletResponse resp) {
         String customerName = req.getParameter("name");
@@ -84,6 +92,7 @@ public class RegisteredServiceController extends HttpServlet {
         req.setAttribute("serviceName",serviceName);
         req.setAttribute("status", "pending");
 
+
         try {
             req.getRequestDispatcher("/view/admin/registeredService.jsp").forward(req,resp);
         } catch (ServletException e) {
@@ -92,7 +101,6 @@ public class RegisteredServiceController extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
-
     private void searchComplete(HttpServletRequest req, HttpServletResponse resp) {
         String customerName = req.getParameter("name");
         String serviceName = req.getParameter("service");
@@ -116,13 +124,37 @@ public class RegisteredServiceController extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
+    private void searchPayNotYet(HttpServletRequest req, HttpServletResponse resp) {
+        String customerName = req.getParameter("name");
+        String serviceName = req.getParameter("service");
+        List<AdminMedicalFormsDto> adminMedicalFormsDto = null;
 
+        if (!customerName.trim().isEmpty() || !serviceName.trim().isEmpty()){
+            adminMedicalFormsDto = adminMedicalFormsService.searchApprove(customerName,serviceName);
+        }else {
+            adminMedicalFormsDto = adminMedicalFormsService.getListPayNotYet();
+        }
+        req.setAttribute("list",adminMedicalFormsDto);
+        req.setAttribute("customerName",customerName);
+        req.setAttribute("serviceName",serviceName);
+        req.setAttribute("status", "pay_not_yet");
+
+        try {
+            req.getRequestDispatcher("/view/admin/registeredService.jsp").forward(req,resp);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     private void showPendingList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         List<AdminMedicalFormsDto> list = adminMedicalFormsService.getAll();
         req.setAttribute("list", list);
         req.setAttribute("status", "pending");
+        if (req.getAttribute("message") != null) {
+        }
 
         req.getRequestDispatcher("/view/admin/registeredService.jsp")
                 .forward(req, resp);
@@ -134,7 +166,9 @@ public class RegisteredServiceController extends HttpServlet {
         List<AdminMedicalFormsDto> list = adminMedicalFormsService.getList();
         req.setAttribute("list", list);
         req.setAttribute("status", "complete");
-
+        if (req.getAttribute("message") == null) {
+            req.setAttribute("message", null);
+        }
         req.getRequestDispatcher("/view/admin/registeredService.jsp")
                 .forward(req, resp);
     }
@@ -143,7 +177,25 @@ public class RegisteredServiceController extends HttpServlet {
         List<AdminMedicalFormsDto> list = adminMedicalFormsService.getListRejected();
         req.setAttribute("list", list);
         req.setAttribute("status", "rejected");
-
+        if (req.getAttribute("message") == null) {
+            req.setAttribute("message", null);
+        }
+        try {
+            req.getRequestDispatcher("/view/admin/registeredService.jsp")
+                    .forward(req, resp);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void showListPayNotYet(HttpServletRequest req, HttpServletResponse resp) {
+        List<AdminMedicalFormsDto> list = adminMedicalFormsService.getListPayNotYet();
+        req.setAttribute("list", list);
+        req.setAttribute("status", "pay_not_yet");
+        if (req.getAttribute("message") == null) {
+            req.setAttribute("message", null);
+        }
         try {
             req.getRequestDispatcher("/view/admin/registeredService.jsp")
                     .forward(req, resp);
@@ -191,8 +243,9 @@ public class RegisteredServiceController extends HttpServlet {
 
         req.setAttribute("message", message);
 
-        showPendingList(req, resp);
+        showListPayNotYet(req,resp);
     }
+
     private void reject(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
@@ -217,8 +270,6 @@ public class RegisteredServiceController extends HttpServlet {
         req.setAttribute("message",message);
         try {
             showCompletedList(req,resp);
-            showPendingList(req,resp);
-            showListRejected(req,resp);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
