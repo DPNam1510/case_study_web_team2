@@ -24,6 +24,11 @@ public class AdminMedicalFormsService implements IAdminMedicalFormsService{
     }
 
     @Override
+    public List<AdminMedicalFormsDto> getListPayNotYet() {
+        return adminMedicalFormsRepo.getListPayNotYet();
+    }
+
+    @Override
     public boolean delete(int id) {
         return adminMedicalFormsRepo.delete(id);
     }
