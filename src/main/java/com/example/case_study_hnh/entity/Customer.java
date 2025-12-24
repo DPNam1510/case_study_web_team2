@@ -6,7 +6,7 @@ public class Customer {
     private int id;
     private String username;
     private int customerTypeId;
-
+    private String customerTypeName;
     private String name;
     private Boolean gender;      // ✅ đổi sang Boolean để có thể null
     private LocalDate birthday;  // ✅ có thể null
@@ -17,10 +17,24 @@ public class Customer {
     private String password; // lấy từ account join qua
     private String role;     // lấy từ account join qua (cột roll)
 
-    public Customer() {}
+    public Customer() {
+    }
 
-    public Customer(int id, String username, int customerTypeId, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
-        this.id = id;
+
+    public Customer(int id, String username, String customerTypeName, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
+        this.id=id;
+        this.username = username;
+        this.customerTypeName = customerTypeName;
+        this.name = name;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+
+    }
+
+    public Customer(String username,int customerTypeId, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
         this.username = username;
         this.customerTypeId = customerTypeId;
         this.name = name;
@@ -62,38 +76,114 @@ public class Customer {
         this.role = role;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public Customer(int id, String username, int customerTypeId, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
+        this.id = id;
+        this.username = username;
+        this.customerTypeId = customerTypeId;
+        this.name = name;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public int getId() {
+        return id;
+    }
 
-    public int getCustomerTypeId() { return customerTypeId; }
-    public void setCustomerTypeId(int customerTypeId) { this.customerTypeId = customerTypeId; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getUsername() {
+        return username;
+    }
 
-    public Boolean getGender() { return gender; }
-    public void setGender(Boolean gender) { this.gender = gender; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
+    }
     // ✅ giữ thêm isGender() để code/JSP cũ không vỡ nếu đang dùng
 //    public boolean isGender() { return gender != null && gender; }
 
-    public LocalDate getBirthday() { return birthday; }
-    public void setBirthday(LocalDate birthday) { this.birthday = birthday; }
+    public LocalDate getBirthday() {
+        return birthday;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getPhone() {
+        return phone;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getCustomerTypeId() {
+        return customerTypeId;
+    }
+
+    public void setCustomerTypeId(int customerTypeId) {
+        this.customerTypeId = customerTypeId;
+    }
+    public String getCustomerTypeName() {
+        return customerTypeName;
+    }
+
+    public void setCustomerTypeName(String customerTypeName) {
+        this.customerTypeName = customerTypeName;
+    }
 }

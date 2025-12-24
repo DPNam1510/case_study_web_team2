@@ -2,8 +2,12 @@ package com.example.case_study_hnh.controller.user;
 
 import com.example.case_study_hnh.entity.Customer;
 import com.example.case_study_hnh.entity.MedicalForms;
+import com.example.case_study_hnh.service.CustomerTypeService;
 import com.example.case_study_hnh.service.MedicalFormsService;
 import com.example.case_study_hnh.service.IMedicalFormsService;
+import com.example.case_study_hnh.dto.MedicalHistoryDto;
+import com.example.case_study_hnh.service.IServiceService;
+import com.example.case_study_hnh.service.ServiceService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,6 +23,7 @@ import java.util.List;
 @WebServlet(name = "MedicalFormsController", urlPatterns = "/medicalForms")
 public class MedicalFormsController extends HttpServlet {
     private final IMedicalFormsService medicalFormsService = new MedicalFormsService();
+    private final IServiceService serviceService = new ServiceService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -28,8 +33,8 @@ public class MedicalFormsController extends HttpServlet {
             case "add":
                 showAddForm(request, response);
                 break;
-            case "delete":
-                deleteMedicalForm(request, response);
+            case "history":
+                showHistory(request, response);
                 break;
             default:
                 showListForm(request, response);
@@ -38,11 +43,9 @@ public class MedicalFormsController extends HttpServlet {
     }
 
     private void showListForm(HttpServletRequest request, HttpServletResponse response) {
-
-        HttpSession session = request.getSession();
-        Customer customer = (Customer) session.getAttribute("customer");
-        List<MedicalForms> medicalFormsList = medicalFormsService.findByCustomer(customer.getId());
+        List<MedicalForms> medicalFormsList = medicalFormsService.findAll();
         request.setAttribute("medicalFormsList", medicalFormsList);
+
         try {
             request.getRequestDispatcher("/view/customer/medicalList.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -51,8 +54,18 @@ public class MedicalFormsController extends HttpServlet {
     }
 
     private void showAddForm(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("serviceList", serviceService.findAll());
         try {
             request.getRequestDispatcher("/view/customer/addMedicalForm.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void showHistory(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("historyList", medicalFormsService.findAllHistory());
+        try {
+            request.getRequestDispatcher("/view/medical_form/history.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,21 +75,27 @@ public class MedicalFormsController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String action = request.getParameter("action");
         if (action == null) action = "";
-        if ("add".equals(action)) {
-            addMedicalForm(request, response);
-        } else {
-            response.sendRedirect("/medicalForms");
+        switch (action) {
+            case "add":
+                addMedicalForm(request, response);
+                break;
+            case "delete":
+                deleteMedicalForm(request, response);
+                break;
+            default:
+                response.sendRedirect("/medicalForms");
         }
     }
 
     private void addMedicalForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         HttpSession session = request.getSession();
-        Customer customer = (Customer) session.getAttribute("customer");
-        LocalDate dateTime = LocalDate.now();
-        LocalDateTime appointmentTime = LocalDateTime.parse(request.getParameter("appointmentTime"));
-        MedicalForms medicalForms = new MedicalForms(0, customer.getId(), dateTime, appointmentTime, "status");
-        medicalFormsService.add(medicalForms);
+        int customerId = (int) session.getAttribute("customerId");
+        MedicalForms form = new MedicalForms();
+        form.setCustomerId(customerId);
+        form.setDateTime(LocalDate.now());
+        form.setAppointmentTime(LocalDateTime.parse(request.getParameter("appointmentTime")));
+        form.setStatus("NEW");
+        medicalFormsService.add(form);
         response.sendRedirect("/medicalForms");
     }
 
