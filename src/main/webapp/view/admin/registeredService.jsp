@@ -96,6 +96,38 @@
                 </form>
             </div>
         </c:if>
+        <c:if test="${status == 'pay_not_yet'}">
+            <div class="mb-4">
+                <form action="${pageContext.request.contextPath}/admin-registered-service"
+                      method="get"
+                      class="row g-2 align-items-end">
+
+                    <input type="hidden" name="action" value="search_pay_not_yet"/>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Tên khách hàng</label>
+                        <input class="form-control"
+                               name="name"
+                               value="${customerName}"
+                               placeholder="Nhập tên khách hàng">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Tên dịch vụ</label>
+                        <input class="form-control"
+                               name="service"
+                               value="${serviceName}"
+                               placeholder="Nhập tên dịch vụ">
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="/admin-registered-service?action=pay_not_yet" class="btn btn-dark">Quay lại</a>
+                    </div>
+                </form>
+            </div>
+        </c:if>
         <c:if test="${status == 'rejected'}">
             <div class="mb-4">
                 <form action="${pageContext.request.contextPath}/admin-registered-service"
@@ -134,13 +166,16 @@
                class="btn btn-primary ${status=='pending' ? 'active' : ''}">
                 Chờ duyệt
             </a>
-
+            <a href="${pageContext.request.contextPath}/admin-registered-service?action=pay_not_yet"
+               class="btn btn-secondary ${status=='pay_not_yet' ? 'active' : ''}">
+                Đã duyệt (đang chờ khám)
+            </a>
             <a href="${pageContext.request.contextPath}/admin-registered-service?action=complete"
                class="btn btn-success ${status=='complete' ? 'active' : ''}">
-                Đã duyệt
+                Đã sử dụng dịch vụ
             </a>
             <a href="${pageContext.request.contextPath}/admin-registered-service?action=rejected"
-               class="btn btn-success ${status=='rejected' ? 'active' : ''}">
+               class="btn btn-danger ${status=='rejected' ? 'active' : ''}">
                 Đã hủy
             </a>
         </div>
@@ -151,10 +186,6 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <c:if test="${not empty param.message}">
-                                <div class="alert alert-info">${param.message}</div>
-                            </c:if>
-
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-primary">
                                 <tr>
@@ -184,21 +215,17 @@
                                         <td>${admf.status}</td>
                                         <td>
                                             <c:if test="${admf.status eq 'Pending'}">
-                                                <form method="post"
-                                                      action="${pageContext.request.contextPath}/admin-registered-service"
-                                                      style="display:inline">
-                                                    <input type="hidden" name="action" value="approve"/>
-                                                    <input type="hidden" name="id" value="${admf.formsId}"/>
-                                                    <button class="btn btn-success btn-sm">Duyệt</button>
-                                                </form>
-                                                <form method="post"
-                                                      action="${pageContext.request.contextPath}/admin-registered-service"
-                                                      style="display:inline">
-                                                    <input type="hidden" name="action" value="reject"/>
-                                                    <input type="hidden" name="id" value="${admf.formsId}"/>
-                                                    <button class="btn btn-danger btn-sm">Hủy</button>
-                                                </form>
+                                                <button type="button" class="btn btn-success btn-sm"
+                                                        onclick="showConfirmModal('approve','${admf.formsId}','Xác nhận nếu muốn --DUYỆT-- đơn này?')">
+                                                    Duyệt
+                                                </button>
+
+                                                <button type="button" class="btn btn-dark btn-sm"
+                                                        onclick="showConfirmModal('reject','${admf.formsId}','Xác nhận nếu muốn --HỦY-- đơn này?')">
+                                                    Hủy
+                                                </button>
                                             </c:if>
+
                                             <button type="button" class="btn btn-danger btn-sm"
                                                     data-bs-toggle="modal" data-bs-target="#deleteModal"
                                                     onclick="getInfoToDelete('${admf.formsId}','${admf.customerName}')">
@@ -227,12 +254,26 @@
             <input type="hidden" id="deleteId" name="id">
             <div class="p-3">
                 <p>Xóa khành hàng <b id="deleteName"></b> ?</p>
+                <button type="submit" class="btn btn-primary">Xóa</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" class="btn btn-danger">Xóa</button>
             </div>
         </form>
     </div>
 </div>
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form class="modal-content" id="confirmForm" method="post">
+            <input type="hidden" name="action" id="confirmAction">
+            <input type="hidden" name="id" id="confirmId">
+            <div class="p-3 text-center">
+                <p id="confirmMessage"></p>
+                <button type="submit" class="btn btn-primary">Xác nhận</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <c:if test="${not empty message}">
     <div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -256,6 +297,15 @@
     function getInfoToDelete(id, name) {
         document.getElementById("deleteId").value = id;
         document.getElementById("deleteName").textContent = name;
+    }
+
+    function showConfirmModal(action, id, message) {
+        document.getElementById("confirmAction").value = action;
+        document.getElementById("confirmId").value = id;
+        document.getElementById("confirmMessage").textContent = message;
+
+        var confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        confirmModal.show();
     }
 </script>
 </html>

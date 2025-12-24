@@ -190,8 +190,6 @@ INSERT INTO forms_detail(id, forms_id, service_id, diagnosis_terminology, prescr
 (14, 14, 14, 'Đau tim', 'Thuốc tim mạch', 100000, '2024-11-07 09:45:00'),
 (15, 15, 15, 'Đau đầu nặng', 'Thuốc giảm đau mạnh', 90000, '2025-03-12 11:00:00');
 
-INSERT INTO forms_detail(id, forms_id, service_id, diagnosis_terminology, prescription, prescription_price, date_time) VALUES
-(16, 16, 12, 'Sốt nhẹ', 'Paracetamol', 40000, '2025-12-16 09:20:00');
 
 INSERT INTO pay_type(name) VALUES
 ('Cash'),
@@ -251,8 +249,6 @@ INSERT INTO orders_detail(id, orders_id, supplements_id, quantity, date_time) VA
 (16, 14, 15, 1, '2024-11-05 20:25:00'),
 (17, 15, 8, 2, '2025-03-15 15:10:00');
 
-INSERT INTO medical_forms(id, customer_id, date_time, appointment_time, status) VALUES
-(16, 16, '2025-12-16', '2025-12-16 09:00:00', 'Pending');
 
 select c.id,c.username,s.name,s.doctor_name
 from customer c
@@ -268,9 +264,6 @@ join forms_detail fd on mf.id = fd.forms_id
 join service s on fd.service_id = s.id
 order by mf.id;
 
-
-select * from medical_forms where status = 'pending';
-
 select id from customer where 
 username is not null and
 customer_type_id is not null and
@@ -282,20 +275,7 @@ phone is not null and
 address is not null
 ;
 
-update medical_forms mf set mf.status = 'Approve'
-where mf.status = 'Pending'
-and exists (select 1 from customer c
-where mf.customer_id = c.id and
-c.username is not null and
-c.customer_type_id is not null and
-c.name is not null and
-c.gender is not null and
-c.birthday is not null and 
-c.email is not null and
-c.phone is not null and 
-c.address is not null)
-;
-
+select * from customer;
 
 select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
 from medical_forms mf
@@ -304,12 +284,55 @@ join forms_detail fd on mf.id = fd.forms_id
 join service s on fd.service_id = s.id
 where status = 'completed' and c.name like '%ha%' and s.name like '%ye%'
 order by mf.id;
+
+
 ALTER TABLE forms_detail
 DROP FOREIGN KEY forms_detail_ibfk_1;
 ALTER TABLE forms_detail
 ADD CONSTRAINT forms_detail_ibfk_1
 FOREIGN KEY (forms_id) REFERENCES medical_forms(id)
 ON DELETE CASCADE;
+
+
+INSERT INTO medical_forms(id, customer_id, date_time, appointment_time, status) VALUES
+(16, 11, '2025-12-25', '2025-12-25 09:00:00', 'Pending'),
+(17, 7, '2025-12-25', '2025-12-25 09:00:00', 'Pending'),
+(18, 12, '2025-12-25', '2025-12-25 09:00:00', 'Pending'),
+(19, 1, '2025-12-25', '2025-12-25 09:00:00', 'Pending'),
+(20, 5, '2025-12-25', '2025-12-25 09:00:00', 'Pending');
+
+
+INSERT INTO forms_detail(id, forms_id, service_id, diagnosis_terminology, prescription, prescription_price, date_time) VALUES
+(16, 16, null, null, null, null, '2025-12-25 09:00:00'),
+(17, 17, null, null, null, null, '2025-12-25 09:00:00'),
+(18, 18, null, null, null, null, '2025-12-25 09:00:00'),
+(19, 19, null, null, null, null, '2025-12-25 09:00:00'),
+(20, 20, null, null, null, null, '2025-12-25 09:00:00');
+
+
+select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
+from medical_forms mf
+join customer c on mf.customer_id = c.id
+left join forms_detail fd on mf.id = fd.forms_id
+left join service s on fd.service_id = s.id
+where status = 'Pending'
+order by mf.id;
+
+select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
+from medical_forms mf
+join customer c on mf.customer_id = c.id
+join forms_detail fd on mf.id = fd.forms_id
+join service s on fd.service_id = s.id
+where status = 'completed' and
+s.name is not null and
+fd.diagnosis_terminology is not null and
+fd.prescription is not null and
+fd.prescription_price is not null
+order by mf.id;
+
+
+
+
 
 
 

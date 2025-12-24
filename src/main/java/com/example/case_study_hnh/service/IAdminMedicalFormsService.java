@@ -8,6 +8,7 @@ public interface IAdminMedicalFormsService {
     List<AdminMedicalFormsDto> getAll();
     List<AdminMedicalFormsDto> getList();
     List<AdminMedicalFormsDto> getListRejected();
+    List<AdminMedicalFormsDto> getListPayNotYet();
     boolean delete(int id);
     boolean approve(int formId);
     boolean reject(int formId);
