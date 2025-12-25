@@ -56,6 +56,11 @@ public class AdminMedicalFormsService implements IAdminMedicalFormsService{
     }
 
     @Override
+    public List<AdminMedicalFormsDto> searchPayNotYet(String searchName, String searchService) {
+        return adminMedicalFormsRepo.searchPayNotYet(searchName,searchService);
+    }
+
+    @Override
     public List<AdminMedicalFormsDto> searchPending(String searchName, String searchService) {
         return adminMedicalFormsRepo.searchPending(searchName,searchService);
     }

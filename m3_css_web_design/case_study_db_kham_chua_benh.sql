@@ -301,6 +301,11 @@ INSERT INTO medical_forms(id, customer_id, date_time, appointment_time, status) 
 (19, 1, '2025-12-25', '2025-12-25 09:00:00', 'Pending'),
 (20, 5, '2025-12-25', '2025-12-25 09:00:00', 'Pending');
 
+INSERT INTO medical_forms(id, customer_id, date_time, appointment_time, status) VALUES
+(21, 16, '2025-12-25', '2025-12-25 22:00:00', 'Pending'),
+(22, 17, '2025-12-25', '2025-12-25 22:00:00', 'Pending'),
+(23, 15, '2025-12-25', '2025-12-25 22:00:00', 'Pending'),
+(24, 7, '2025-12-25', '2025-12-25 22:00:00', 'Pending');
 
 INSERT INTO forms_detail(id, forms_id, service_id, diagnosis_terminology, prescription, prescription_price, date_time) VALUES
 (16, 16, null, null, null, null, '2025-12-25 09:00:00'),
@@ -310,28 +315,51 @@ INSERT INTO forms_detail(id, forms_id, service_id, diagnosis_terminology, prescr
 (20, 20, null, null, null, null, '2025-12-25 09:00:00');
 
 
-select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
-from medical_forms mf
-join customer c on mf.customer_id = c.id
-left join forms_detail fd on mf.id = fd.forms_id
-left join service s on fd.service_id = s.id
-where status = 'Pending'
-order by mf.id;
+-- INSERT INTO medical_forms(id, customer_id, date_time, appointment_time, status) VALUES
+-- (21, 16, '2025-12-25', '2025-12-25 22:00:00', 'Pending'),
+-- (22, 17, '2025-12-25', '2025-12-25 22:00:00', 'Pending'),
+-- (23, 15, '2025-12-25', '2025-12-25 22:00:00', 'Pending'),
+-- (24, 7, '2025-12-25', '2025-12-25 22:00:00', 'Pending');
 
-select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
-from medical_forms mf
-join customer c on mf.customer_id = c.id
-join forms_detail fd on mf.id = fd.forms_id
-join service s on fd.service_id = s.id
-where status = 'completed' and
-s.name is not null and
-fd.diagnosis_terminology is not null and
-fd.prescription is not null and
-fd.prescription_price is not null
-order by mf.id;
+-- INSERT INTO forms_detail(id, forms_id, service_id, diagnosis_terminology, prescription, prescription_price, date_time) VALUES
+-- (21, 21, 5, null, null, null, '2025-12-25 22:00:00'),
+-- (22, 22, 2, null, null, null, '2025-12-25 22:00:00'),
+-- (23, 23, 10, null, null, null, '2025-12-25 22:00:00'),
+-- (24, 24, 15, null, null, null, '2025-12-25 22:00:00');
 
 
 
+-- select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
+-- from medical_forms mf
+-- join customer c on mf.customer_id = c.id
+-- left join forms_detail fd on mf.id = fd.forms_id
+-- left join service s on fd.service_id = s.id
+-- where status = 'Pending'
+-- order by mf.id;
+
+-- select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
+-- from medical_forms mf
+-- join customer c on mf.customer_id = c.id
+-- join forms_detail fd on mf.id = fd.forms_id
+-- join service s on fd.service_id = s.id
+-- where status = 'completed' and
+-- s.name is not null and
+-- fd.diagnosis_terminology is not null and
+-- fd.prescription is not null and
+-- fd.prescription_price is not null
+-- order by mf.id;
+
+
+-- select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status
+-- from medical_forms mf
+-- join customer c on mf.customer_id = c.id
+-- left join forms_detail fd on mf.id = fd.forms_id
+-- left join service s on fd.service_id = s.id
+-- where status = 'Completed' and c.name like '%h%' and
+-- (fd.diagnosis_terminology is null and
+-- fd.prescription is null and
+-- fd.prescription_price is null)
+-- order by mf.id;
 
 
 
