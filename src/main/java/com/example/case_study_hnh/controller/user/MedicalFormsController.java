@@ -1,5 +1,7 @@
 package com.example.case_study_hnh.controller.user;
 
+import com.example.case_study_hnh.dto.MedicalFormAddDto;
+import com.example.case_study_hnh.entity.Account;
 import com.example.case_study_hnh.entity.MedicalForms;
 import com.example.case_study_hnh.service.MedicalFormsService;
 import com.example.case_study_hnh.service.IMedicalFormsService;
@@ -19,57 +21,53 @@ import java.util.List;
 
 @WebServlet(name = "MedicalFormsController", urlPatterns = "/medicalForms")
 public class MedicalFormsController extends HttpServlet {
-    private final IMedicalFormsService medicalFormsService = new MedicalFormsService();
-    private final IServiceService serviceService = new ServiceService();
+    private IMedicalFormsService medicalFormsService = new MedicalFormsService();
+    private IServiceService serviceService = new ServiceService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action == null) action = "";
         switch (action) {
             case "add":
-                showAddForm(request, response);
+                showFormAdd(request, response);
                 break;
-            case "history":
-                showHistory(request, response);
+            case "list":
+                showList(request, response);
                 break;
             default:
-                showListForm(request, response);
-                break;
+                response.sendRedirect("/home-customer");
         }
     }
 
-    private void showListForm(HttpServletRequest request, HttpServletResponse response) {
-        List<MedicalForms> medicalFormsList = medicalFormsService.findAll();
-        request.setAttribute("medicalFormsList", medicalFormsList);
+    private void showFormAdd(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        try {
-            request.getRequestDispatcher("/view/customer/medicalList.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            throw new RuntimeException(e);
+        HttpSession session = request.getSession();
+        Integer customerId = (Integer) session.getAttribute("customerId");
+
+        if (customerId == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
-    }
 
-    private void showAddForm(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("customerId", customerId);
         request.setAttribute("serviceList", serviceService.findAll());
-        try {
-            request.getRequestDispatcher("/view/customer/addMedicalForm.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        request.getRequestDispatcher("/view/customer/addMedicalForm.jsp").forward(request, response);
     }
 
-    private void showHistory(HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute("historyList", medicalFormsService.findAllHistory());
-        try {
-            request.getRequestDispatcher("/view/medical_form/history.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            throw new RuntimeException(e);
-        }
+    private void showList(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+        request.setAttribute("medicalForms", medicalFormsService.findByUsername(username));
+        request.getRequestDispatcher("/view/customer/medicalList.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action == null) action = "";
         switch (action) {
@@ -80,27 +78,32 @@ public class MedicalFormsController extends HttpServlet {
                 deleteMedicalForm(request, response);
                 break;
             default:
-                response.sendRedirect("/medicalForms");
+                response.sendRedirect("/home-customer");
         }
     }
 
-    private void addMedicalForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
-        int customerId = (int) session.getAttribute("customerId");
-        MedicalForms form = new MedicalForms();
-        form.setCustomerId(customerId);
-        form.setDateTime(LocalDate.now());
-        form.setAppointmentTime(LocalDateTime.parse(request.getParameter("appointmentTime")));
-        form.setStatus("NEW");
-        medicalFormsService.add(form);
-        response.sendRedirect("/medicalForms");
+    private void addMedicalForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int customerId = Integer.parseInt(request.getParameter("customerId"));
+        int serviceId = Integer.parseInt(request.getParameter("serviceId"));
+        LocalDate medicalDate = LocalDate.parse(request.getParameter("medicalDate"));
+        LocalDateTime appointmentTime = LocalDateTime.parse(request.getParameter("appointmentTime"));
+        MedicalFormAddDto medicalFormAddDto = new MedicalFormAddDto(customerId, serviceId, medicalDate, appointmentTime);
+        boolean isAddSuccess = medicalFormsService.add(medicalFormAddDto);
+        String mess = isAddSuccess ? "Product added successfully" : "Product not added";
+        try {
+            response.sendRedirect("/medicalForms?action=list&message=" + mess);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void deleteMedicalForm(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws ServletException, IOException {
+        int medicalFormId = Integer.parseInt(request.getParameter("id"));
+        medicalFormsService.deleteById(medicalFormId);
 
-        int id = Integer.parseInt(request.getParameter("id"));
-        medicalFormsService.delete(id);
-        response.sendRedirect("/medicalForms");
+        response.sendRedirect(request.getContextPath()
+                + "/medicalForms?action=list");
     }
 }

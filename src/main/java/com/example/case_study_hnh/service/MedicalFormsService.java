@@ -1,33 +1,25 @@
 package com.example.case_study_hnh.service;
 
-import com.example.case_study_hnh.entity.MedicalForms;
 import com.example.case_study_hnh.repository.MedicalFormsRepository;
 import com.example.case_study_hnh.repository.IMedicalFormsRepository;
-import com.example.case_study_hnh.dto.MedicalFormDto;
+import com.example.case_study_hnh.dto.MedicalFormDisplayDto;
+import com.example.case_study_hnh.dto.MedicalFormAddDto;
 
 import java.util.List;
 
 public class MedicalFormsService implements IMedicalFormsService {
     private final IMedicalFormsRepository medicalFormsRepository = new MedicalFormsRepository();
-
     @Override
-    public List<MedicalForms> findAll() {
-        return medicalFormsRepository.findAll();
+    public boolean add(MedicalFormAddDto medicalFormAddDto){
+        return medicalFormsRepository.add(medicalFormAddDto);
     }
-
     @Override
-    public boolean add(MedicalForms medicalForms) {
-        return medicalFormsRepository.add(medicalForms);
+    public List<MedicalFormDisplayDto> findByUsername(String username) {
+        return medicalFormsRepository.findAllByUsername(username);
     }
-
     @Override
-    public boolean delete(int id) {
-        return medicalFormsRepository.delete(id);
-    }
-
-    @Override
-    public List<MedicalFormDto> findAllHistory() {
-        return medicalFormsRepository.findAllHistory();
+    public boolean deleteById(int medicalFormId) {
+        return medicalFormsRepository.deleteById(medicalFormId);
     }
 
 }

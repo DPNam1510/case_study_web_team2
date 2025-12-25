@@ -1,15 +1,20 @@
 
 package com.example.case_study_hnh.controller.auth;
 
+import com.example.case_study_hnh.dto.CustomerDto;
 import com.example.case_study_hnh.entity.Account;
+import com.example.case_study_hnh.entity.Customer;
 import com.example.case_study_hnh.service.AccountService;
+import com.example.case_study_hnh.service.CustomerService;
 import com.example.case_study_hnh.service.IAccountService;
+import com.example.case_study_hnh.service.ICustomerService;
 import com.example.case_study_hnh.util.CheckValidate;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -17,6 +22,7 @@ import java.io.IOException;
 public class LoginController extends HttpServlet {
 //    Xử lý đăng nhập, tạo session, phân luồng admin/user
     private final IAccountService accountService = new AccountService();
+    private final ICustomerService customerService = new CustomerService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,9 +62,17 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        req.getSession().setAttribute("account", account);
-        req.getSession().setAttribute("username", account.getUsername());
-
+        HttpSession session = req.getSession();
+        session.setAttribute("account", account);
+        session.setAttribute("username", account.getUsername());
+//        req.getSession().setAttribute("account", account);
+//        req.getSession().setAttribute("username", account.getUsername());
+        if (!"admin".equalsIgnoreCase(account.getRole())) {
+            CustomerDto customer = customerService.findByUsername(username);
+            if (customer != null) {
+                session.setAttribute("customerId", customer.getId());
+            }
+        }
         if ("admin".equalsIgnoreCase(account.getRole())) {
             resp.sendRedirect(req.getContextPath()+"/home-admin");
         } else {

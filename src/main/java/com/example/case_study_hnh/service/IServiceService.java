@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface IServiceService {
     List<Service> findAll();
-    List<Service> findByName(String keyWords);
+    List<Service> findByName(String name,String doctorName);
 }

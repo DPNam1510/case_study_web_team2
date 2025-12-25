@@ -8,7 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class CustomerRepository implements ICustomerRepository {
-    private String FIND_USERNAME = "select a.username as username,ct.name as type_customer, c.name, c.gender,c.birthday,c.email,c.phone,c.address\n" +
+    private String FIND_USERNAME = "select c.id, a.username as username,ct.name as type_customer, c.name, c.gender,c.birthday,c.email,c.phone,c.address\n" +
             "from customer c " +
             "join customer_type ct on ct.id = c.customer_type_id " +
             "join account a on a.username = c.username " +
@@ -21,12 +21,12 @@ public class CustomerRepository implements ICustomerRepository {
     @Override
     public CustomerDto findByUsername(String username) {
         CustomerDto customerDto = null;
-        try( Connection connection = ConnectDB.getConnectDB()) {
+        try (Connection connection = ConnectDB.getConnectDB()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_USERNAME);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-
+                int id = resultSet.getInt("id");
                 String customerTypeName = resultSet.getString("type_customer");
                 String name = resultSet.getString("name");
                 boolean gender = resultSet.getBoolean("gender");
@@ -35,7 +35,7 @@ public class CustomerRepository implements ICustomerRepository {
                 String email = resultSet.getString("email");
                 String phone = resultSet.getString("phone");
                 String address = resultSet.getString("address");
-                customerDto = new CustomerDto(username,customerTypeName,name,gender,birthday,email,phone,address);
+                customerDto = new CustomerDto(id, username, customerTypeName, name, gender, birthday, email, phone, address);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
