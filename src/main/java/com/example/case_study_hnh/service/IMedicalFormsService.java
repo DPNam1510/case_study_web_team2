@@ -1,7 +1,7 @@
 package com.example.case_study_hnh.service;
 
 import com.example.case_study_hnh.entity.MedicalForms;
-import com.example.case_study_hnh.dto.MedicalHistoryDto;
+import com.example.case_study_hnh.dto.MedicalFormDto;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ public interface IMedicalFormsService {
 
     boolean delete(int id);
 
-    List<MedicalHistoryDto> findAllHistory();
+    List<MedicalFormDto> findAllHistory();
 }

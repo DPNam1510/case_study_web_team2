@@ -1,7 +1,7 @@
 package com.example.case_study_hnh.repository;
 
 import com.example.case_study_hnh.entity.MedicalForms;
-import com.example.case_study_hnh.dto.MedicalHistoryDto;
+import com.example.case_study_hnh.dto.MedicalFormDto;
 import com.example.case_study_hnh.util.ConnectDB;
 
 import java.sql.*;
@@ -11,109 +11,140 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MedicalFormsRepository implements IMedicalFormsRepository {
-    private final String FIND_ALL = "SELECT * FROM medical_forms";
-    private final String ADD = "INSERT INTO medical_forms(customer_id, date_time, appointment_time, status) " +
-                    "VALUES (?, ?, ?, ?)";
-    private final String DELETE_FORM_DETAIL = "DELETE FROM forms_detail WHERE forms_id = ?";
+    private static final String INSERT_FORM = "INSERT INTO medical_forms(id, customer_id, date_time, appointment_time, status) " +
+                    "VALUES (?, ?, ?, ?, 'Pending')";
 
-    private final String DELETE_MEDICAL_FORM = "DELETE FROM medical_forms WHERE id = ?";
-    private final String FIND_HISTORY =
-            "SELECT mf.id AS form_id, mf.appointment_time, mf.status, " +
-                    "       s.name AS service_name, s.doctor_name " +
-                    "FROM medical_forms mf " +
-                    "JOIN forms_detail fd ON mf.id = fd.forms_id " +
-                    "JOIN service s ON fd.service_id = s.id " +
-                    "ORDER BY mf.appointment_time DESC";
-    @Override
-    public List<MedicalForms> findAll() {
-        List<MedicalForms> medicalFormsList = new ArrayList<>();
-        try (Connection connection = ConnectDB.getConnectDB()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                int customerId = resultSet.getInt("customer_id");
-                LocalDate dateTime = resultSet.getDate("date_time").toLocalDate();
-                LocalDateTime appointmentTime = resultSet.getTimestamp("appointment_time").toLocalDateTime();
-                String status = resultSet.getString("status");
-                MedicalForms medicalForms = new MedicalForms(id,customerId,dateTime,appointmentTime,status);
-                medicalFormsList.add(medicalForms);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return medicalFormsList;
-    }
-    @Override
-    public boolean add(MedicalForms medicalForms) {
-        try (Connection connection = ConnectDB.getConnectDB();
-             PreparedStatement preparedStatement = connection.prepareStatement(ADD)) {
+    private static final String INSERT_DETAIL = "INSERT INTO forms_detail(id, forms_id, service_id) VALUES (?, ?, ?)";
 
-            preparedStatement.setInt(1, medicalForms.getCustomerId());
-            preparedStatement.setDate(2, Date.valueOf(medicalForms.getDateTime()));
-            preparedStatement.setTimestamp(3, Timestamp.valueOf(medicalForms.getAppointmentTime()));
-            preparedStatement.setString(4, medicalForms.getStatus());
+    private static final String FIND_ALL = "SELECT mf.id AS medical_form_id, c.username AS customer_username, c.name AS customer_name, " +
+                    "mf.date_time AS medical_date, mf.appointment_time AS appointment_time, mf.status AS status, " +
+                    "s.name AS service_name, s.doctor_name AS doctor_name " +
+                    "FROM customer c " +
+                    "JOIN medical_forms mf ON mf.customer_id = c.id " +
+                    "JOIN forms_detail fd ON fd.forms_id = mf.id " +
+                    "JOIN service s ON s.id = fd.service_id " +
+                    "WHERE c.username = ?";
 
-            return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final String DELETE_DETAIL = "DELETE FROM forms_detail WHERE forms_id = ?";
+
+    private static final String DELETE_FORM = "DELETE FROM medical_forms WHERE id = ?";
+
     @Override
-    public boolean delete(int id) {
+    public boolean addMedicalForm(int customerId, int serviceId,
+                                  LocalDate medicalDate, LocalDateTime appointmentTime) {
+
         Connection connection = null;
         try {
             connection = ConnectDB.getConnectDB();
             connection.setAutoCommit(false);
 
-            try (PreparedStatement preparedStatement1 = connection.prepareStatement(DELETE_FORM_DETAIL)) {
-                preparedStatement1.setInt(1, id);
-                preparedStatement1.executeUpdate();
+            int formId = (int) (System.currentTimeMillis() / 1000);
+            int detailId = formId + 1;
+
+            try (PreparedStatement psForm = connection.prepareStatement(INSERT_FORM);
+                 PreparedStatement psDetail = connection.prepareStatement(INSERT_DETAIL)) {
+
+                psForm.setInt(1, formId);
+                psForm.setInt(2, customerId);
+                psForm.setDate(3, Date.valueOf(medicalDate));
+                psForm.setTimestamp(4, Timestamp.valueOf(appointmentTime));
+                psForm.executeUpdate();
+
+                psDetail.setInt(1, detailId);
+                psDetail.setInt(2, formId);
+                psDetail.setInt(3, serviceId);
+                psDetail.executeUpdate();
+
+                connection.commit(); // ✅ OK
+                return true;
             }
 
-            try (PreparedStatement preparedStatement2 = connection.prepareStatement(DELETE_MEDICAL_FORM)) {
-                preparedStatement2.setInt(1, id);
-                preparedStatement2.executeUpdate();
-            }
-
-            connection.commit();
-            return true;
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
-                connection.rollback();
-            } catch (SQLException ignored) {
-                ignored.printStackTrace();
+                if (connection != null) connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
             throw new RuntimeException(e);
 
         } finally {
             try {
-                if (connection != null) connection.close();
-            } catch (SQLException ignored) {
-                ignored.printStackTrace();
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
-    @Override
-    public List<MedicalHistoryDto> findAllHistory() {
-        List<MedicalHistoryDto> list = new ArrayList<>();
-        try (Connection connection = ConnectDB.getConnectDB();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_HISTORY)) {
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                list.add(new MedicalHistoryDto(
-                        resultSet.getInt("form_id"),
-                        resultSet.getTimestamp("appointment_time").toLocalDateTime(),
-                        resultSet.getString("status"),
-                        resultSet.getString("service_name"),
-                        resultSet.getString("doctor_name")
+    @Override
+    public List<MedicalFormDto> findAllByUsername(String username) {
+        List<MedicalFormDto> list = new ArrayList<>();
+
+        try (Connection conn = ConnectDB.getConnectDB();
+             PreparedStatement ps = conn.prepareStatement(FIND_ALL)) {
+
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(new MedicalFormDto(
+                        rs.getInt("medical_form_id"),
+                        rs.getString("customer_username"),
+                        rs.getString("customer_name"),
+                        rs.getDate("medical_date").toLocalDate(),
+                        rs.getTimestamp("appointment_time").toLocalDateTime(),
+                        rs.getString("status"),
+                        rs.getString("service_name"),
+                        rs.getString("doctor_name")
                 ));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return list;
+    }
+
+    @Override
+    public boolean deleteById(int medicalFormId) {
+
+        Connection conn = null;
+        try {
+            conn = ConnectDB.getConnectDB();
+            conn.setAutoCommit(false); // 🔥 TRANSACTION
+
+            try (PreparedStatement psDetail = conn.prepareStatement(DELETE_DETAIL);
+                 PreparedStatement psForm = conn.prepareStatement(DELETE_FORM)) {
+
+                psDetail.setInt(1, medicalFormId);
+                psDetail.executeUpdate();
+
+                psForm.setInt(1, medicalFormId);
+                int row = psForm.executeUpdate();
+
+                conn.commit();
+                return row > 0;
+            }
+
+        } catch (Exception e) {
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

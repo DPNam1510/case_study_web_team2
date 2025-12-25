@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 
-@WebServlet(name = "CustomerController", urlPatterns = "/customers")
-public class CustomerController extends HttpServlet {
+@WebServlet(name = "CustomerProfileController", urlPatterns = "/customers")
+public class CustomerProfileController extends HttpServlet {
 
     private final ICustomerService customerService = new CustomerService();
     private final ICustomerTypeService customerTypeService = new CustomerTypeService();
@@ -27,18 +27,21 @@ public class CustomerController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action == null) action = "";
+        if (action == null) action = "profile";
         switch (action) {
+            case "profile":
+                showProfile(request, response);
+                break;
             case "update":
                 showFormUpdate(request, response);
                 break;
             default:
-                showFormCustomer(request, response);
-                break;
+                response.sendRedirect("/home-customer");
         }
     }
 
-    private void showFormCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void showProfile(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         Account account = (Account) request.getSession().getAttribute("account");
         if (account == null) {
             response.sendRedirect("/login");
@@ -46,13 +49,20 @@ public class CustomerController extends HttpServlet {
         }
         CustomerDto customerDto = customerService.findByUsername(account.getUsername());
         request.setAttribute("customer", customerDto);
+        request.setAttribute("customerTypeList", customerTypeService.findAll());
         request.getRequestDispatcher("/view/customer/customerList.jsp").forward(request, response);
     }
 
-    private void showFormUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void showFormUpdate(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String message = (String) request.getSession().getAttribute("message");
+        if (message != null) {
+            request.setAttribute("message", message);
+            request.getSession().removeAttribute("message");
+        }
         Account account = (Account) request.getSession().getAttribute("account");
         if (account == null) {
-            response.sendRedirect("/login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         CustomerDto customerDto = customerService.findByUsername(account.getUsername());
@@ -65,21 +75,21 @@ public class CustomerController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action == null) action = "";
+        if (action == null) action = "update";
         switch (action) {
             case "update":
-                updateProduct(request, response);
+                updateCustomer(request, response);
                 break;
             default:
-                showFormCustomer(request, response);
-                break;
+                response.sendRedirect("/home-customer");
         }
     }
 
-    private void updateProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void updateCustomer(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         Account account = (Account) request.getSession().getAttribute("account");
         if (account == null) {
-            response.sendRedirect("/login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         String username = account.getUsername();
@@ -95,7 +105,7 @@ public class CustomerController extends HttpServlet {
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
-        Customer customer = new Customer(username,customerTypeId,name,gender,birthday,email,phone,address);
+        Customer customer = new Customer(username, customerTypeId, name, gender, birthday, email, phone, address);
 
 
         boolean success = customerService.update(customer);
@@ -103,10 +113,8 @@ public class CustomerController extends HttpServlet {
         request.setAttribute("customer", customerService.findByUsername(account.getUsername()));
         request.setAttribute("customerTypeList", customerTypeService.findAll());
         request.setAttribute("message", success ? "Cập nhật thành công" : "Cập nhật thất bại");
-
-        request.getRequestDispatcher("/view/customer/updateCustomer.jsp")
-                .forward(request, response);
-
+        response.sendRedirect(request.getContextPath() +"/customers");
     }
 }
+
 

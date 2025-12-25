@@ -6,7 +6,6 @@ public class Customer {
     private int id;
     private String username;
     private int customerTypeId;
-    private String customerTypeName;
     private String name;
     private Boolean gender;      // ✅ đổi sang Boolean để có thể null
     private LocalDate birthday;  // ✅ có thể null
@@ -21,18 +20,6 @@ public class Customer {
     }
 
 
-    public Customer(int id, String username, String customerTypeName, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
-        this.id=id;
-        this.username = username;
-        this.customerTypeName = customerTypeName;
-        this.name = name;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.email = email;
-        this.phone = phone;
-        this.address = address;
-
-    }
 
     public Customer(String username,int customerTypeId, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
         this.username = username;
@@ -76,17 +63,6 @@ public class Customer {
         this.role = role;
     }
 
-    public Customer(int id, String username, int customerTypeId, String name, Boolean gender, LocalDate birthday, String email, String phone, String address) {
-        this.id = id;
-        this.username = username;
-        this.customerTypeId = customerTypeId;
-        this.name = name;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.email = email;
-        this.phone = phone;
-        this.address = address;
-    }
 
     public int getId() {
         return id;
@@ -178,12 +154,5 @@ public class Customer {
 
     public void setCustomerTypeId(int customerTypeId) {
         this.customerTypeId = customerTypeId;
-    }
-    public String getCustomerTypeName() {
-        return customerTypeName;
-    }
-
-    public void setCustomerTypeName(String customerTypeName) {
-        this.customerTypeName = customerTypeName;
     }
 }

@@ -46,13 +46,13 @@
 
     <div class="card">
         <div class="card-body">
-            <form method="post" action="<c:url value="${pageContext.request.contextPath}/customers"/>">
+            <form method="post" action="<c:url value="/customers"/>">
                 <input type="hidden" name="action" value="update">
-                <input type="hidden" name="id" value="${customer.id}">
                 <div class="mb-3">
                     <label class="form-label fw-bold">Username</label>
                     <input class="form-control" type="text" name="username" value="${customer.username}" readonly>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label fw-bold">Type Customer</label>
                     <select class="form-select" name="customerTypeId">
@@ -65,6 +65,7 @@
                     </select>
 
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label fw-bold">Họ tên</label>
                     <input class="form-control" type="text" name="name" value="${customer.name}" required>
@@ -101,6 +102,7 @@
                 <button type="submit" class="btn btn-primary w-100">
                     <i class="fa-solid fa-floppy-disk"></i> Cập nhật
                 </button>
+
             </form>
         </div>
     </div>
