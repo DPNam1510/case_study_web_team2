@@ -25,9 +25,9 @@
             <li class="dropdown">
                 <a>Khám bệnh ▾</a>
                 <ul class="dropdown-menu">
-                    <li><a href="<c:url value="/view/customer/serviceList.jsp"/>">Danh sách dịch vụ</a></li>
-                    <li><a href="<c:url value="/view/customer/addMedicalForm.jsp"/>">Đăng ký khám</a></li>
-                    <li><a href="<c:url value="/view/customer/medicalList.jsp"/>">Lịch sử khám</a></li>
+                    <li><a href="<c:url value='/service-list'/>">Dịch vụ</a></li>
+                    <li><a href="<c:url value="/medicalForms?action=add"/>">Đăng ký khám</a></li>
+                    <li><a href="<c:url value="/medicalForms?action=list"/>">Lịch sử khám</a></li>
                 </ul>
             </li>
 
@@ -68,7 +68,7 @@
         <div class="service-item">
             <h3>Dịch vụ khám</h3>
             <p>Xem & tìm dịch vụ khám chữa bệnh</p>
-            <a href="<c:url value="/services"/>">Xem</a>
+            <a href="<c:url value="/service-list"/>">Xem</a>
         </div>
 
         <div class="service-item">

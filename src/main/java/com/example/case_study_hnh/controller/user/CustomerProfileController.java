@@ -55,11 +55,6 @@ public class CustomerProfileController extends HttpServlet {
 
     private void showFormUpdate(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String message = (String) request.getSession().getAttribute("message");
-        if (message != null) {
-            request.setAttribute("message", message);
-            request.getSession().removeAttribute("message");
-        }
         Account account = (Account) request.getSession().getAttribute("account");
         if (account == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -107,13 +102,16 @@ public class CustomerProfileController extends HttpServlet {
         String address = request.getParameter("address");
         Customer customer = new Customer(username, customerTypeId, name, gender, birthday, email, phone, address);
 
-
-        boolean success = customerService.update(customer);
-
         request.setAttribute("customer", customerService.findByUsername(account.getUsername()));
         request.setAttribute("customerTypeList", customerTypeService.findAll());
-        request.setAttribute("message", success ? "Cập nhật thành công" : "Cập nhật thất bại");
-        response.sendRedirect(request.getContextPath() +"/customers");
+        boolean success = customerService.update(customer);
+        String mess = success ? "Product added successfully" : "Product not added";
+        try {
+            response.sendRedirect("/customers?message=" + mess);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
 

@@ -1,16 +1,16 @@
 package com.example.case_study_hnh.service;
 
+import com.example.case_study_hnh.dto.MedicalFormAddDto;
 import com.example.case_study_hnh.entity.MedicalForms;
-import com.example.case_study_hnh.dto.MedicalFormDto;
+import com.example.case_study_hnh.dto.MedicalFormDisplayDto;
 
 import java.util.List;
 
 public interface IMedicalFormsService {
-    List<MedicalForms> findAll();
+    boolean add(MedicalFormAddDto medicalFormAddDto);
 
-    boolean add(MedicalForms medicalForms);
+    List<MedicalFormDisplayDto> findByUsername(String username);
 
-    boolean delete(int id);
+    boolean deleteById(int medicalFormId);
 
-    List<MedicalFormDto> findAllHistory();
 }

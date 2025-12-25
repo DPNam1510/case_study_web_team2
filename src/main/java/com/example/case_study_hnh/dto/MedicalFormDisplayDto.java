@@ -3,7 +3,7 @@ package com.example.case_study_hnh.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class MedicalFormDto {
+public class MedicalFormDisplayDto {
     private int medicalFormId;
     private String customerUsername;
     private String customerName;
@@ -13,12 +13,12 @@ public class MedicalFormDto {
     private String serviceName;
     private String doctorName;
 
-    public MedicalFormDto() {
+    public MedicalFormDisplayDto() {
     }
 
-    public MedicalFormDto(int medicalFormId, String customerUsername, String customerName,
-                          LocalDate medicalDate, LocalDateTime appointmentTime,
-                          String status, String serviceName, String doctorName) {
+    public MedicalFormDisplayDto(int medicalFormId, String customerUsername, String customerName,
+                                 LocalDate medicalDate, LocalDateTime appointmentTime,
+                                 String status, String serviceName, String doctorName) {
         this.medicalFormId = medicalFormId;
         this.customerUsername = customerUsername;
         this.customerName = customerName;

@@ -3,6 +3,7 @@ package com.example.case_study_hnh.dto;
 import java.time.LocalDate;
 
 public class CustomerDto {
+    private int id;
     private String username;
     private String customerTypeName;
     private String name;
@@ -15,8 +16,9 @@ public class CustomerDto {
     public CustomerDto() {
     }
 
-    public CustomerDto(String username, String customerTypeName, String name, Boolean gender,
+    public CustomerDto( int customerId,String username, String customerTypeName, String name, Boolean gender,
                        LocalDate birthday, String email, String phone, String address) {
+        this.id = customerId;
         this.username = username;
         this.customerTypeName = customerTypeName;
         this.name = name;
@@ -89,5 +91,13 @@ public class CustomerDto {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

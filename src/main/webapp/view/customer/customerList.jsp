@@ -65,7 +65,10 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <div class="row g-4">
-
+                <div class="col-md-6">
+                    <div class="info-label">CustomerId</div>
+                    <div class="info-value">${customer.id}</div>
+                </div>
                 <div class="col-md-6">
                     <div class="info-label">Username</div>
                     <div class="info-value">${customer.username}</div>

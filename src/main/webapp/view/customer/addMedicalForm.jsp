@@ -39,18 +39,32 @@
         <div class="card-body">
             <form action="<c:url value="/medicalForms"/>" method="post">
                 <input type="hidden" name="action" value="add"/>
-
-                <label class="form-label fw-bold">Thời gian khám:</label>
-                <input class="form-control" type="datetime-local" name="appointmentTime" required/>
-
-                <div class="d-flex gap-2 mt-3">
-                    <button type="submit" class="btn btn-primary flex-fill">
-                        <i class="fa-solid fa-plus"></i> Đăng ký
-                    </button>
-                    <a class="btn btn-outline-secondary flex-fill" href="<c:url value="home_customer.jsp"/>">
-                        Quay lại
-                    </a>
+                <input type="hidden" name="customerId" value="${customerId}">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Dịch vụ khám</label>
+                    <select class="form-select" name="serviceId" required>
+                        <option value="">-- Chọn dịch vụ --</option>
+                        <c:forEach var="s" items="${serviceList}">
+                            <option value="${s.id}">
+                                    ${s.name} - ${s.doctorName}
+                            </option>
+                        </c:forEach>
+                    </select>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Ngày khám</label>
+                    <input type="date" name="medicalDate"
+                           class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Thời gian khám</label>
+                    <input type="datetime-local" name="appointmentTime"
+                           class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fa-solid fa-plus"></i> Đăng ký
+                </button>
+
             </form>
 
             <div class="mt-3 text-muted" style="font-size: 13px;">
