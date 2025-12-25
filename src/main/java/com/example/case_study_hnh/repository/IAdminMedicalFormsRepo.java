@@ -16,6 +16,7 @@ public interface IAdminMedicalFormsRepo {
     boolean isCustomerInfoComplete(int customerId);
     int getCustomerIdByFormId(int formId);
     List<AdminMedicalFormsDto> searchApprove (String searchName, String searchService);
+    List<AdminMedicalFormsDto> searchPayNotYet (String searchName, String searchService);
     List<AdminMedicalFormsDto> searchPending (String searchName, String searchService);
     List<AdminMedicalFormsDto> searchReject (String searchName, String searchService);
 }

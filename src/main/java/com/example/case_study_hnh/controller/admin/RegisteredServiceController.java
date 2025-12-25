@@ -130,7 +130,7 @@ public class RegisteredServiceController extends HttpServlet {
         List<AdminMedicalFormsDto> adminMedicalFormsDto = null;
 
         if (!customerName.trim().isEmpty() || !serviceName.trim().isEmpty()){
-            adminMedicalFormsDto = adminMedicalFormsService.searchApprove(customerName,serviceName);
+            adminMedicalFormsDto = adminMedicalFormsService.searchPayNotYet(customerName,serviceName);
         }else {
             adminMedicalFormsDto = adminMedicalFormsService.getListPayNotYet();
         }

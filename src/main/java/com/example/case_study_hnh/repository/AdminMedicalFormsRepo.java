@@ -96,6 +96,39 @@ public class AdminMedicalFormsRepo implements IAdminMedicalFormsRepo{
             "where status = ? and s.name like ? " +
             "order by mf.id;";
 
+    private final String SEARCH_NAME_SERVICE_PAY_NOT_YET = "select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status " +
+            "from medical_forms mf " +
+            "join customer c on mf.customer_id = c.id " +
+            "left join forms_detail fd on mf.id = fd.forms_id " +
+            "left join service s on fd.service_id = s.id " +
+            "where status = ? and c.name like ? and s.name like ? and " +
+            "(fd.diagnosis_terminology is null and " +
+            "fd.prescription is null and " +
+            "fd.prescription_price is null) " +
+            "order by mf.id;";
+
+    private final String SEARCH_NAME_PAY_NOT_YET = "select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status " +
+            "from medical_forms mf " +
+            "join customer c on mf.customer_id = c.id " +
+            "left join forms_detail fd on mf.id = fd.forms_id " +
+            "left join service s on fd.service_id = s.id " +
+            "where status = ? and c.name like ? and " +
+            "(fd.diagnosis_terminology is null and " +
+            "fd.prescription is null and " +
+            "fd.prescription_price is null) " +
+            "order by mf.id;";
+
+    private final String SEARCH_SERVICE_PAY_NOT_YET = "select mf.id as forms_id,c.name as customer_name,s.name as service_name,s.doctor_name ,mf.status as status " +
+            "from medical_forms mf " +
+            "join customer c on mf.customer_id = c.id " +
+            "left join forms_detail fd on mf.id = fd.forms_id " +
+            "left join service s on fd.service_id = s.id " +
+            "where status = ? and s.name like ? and " +
+            "(fd.diagnosis_terminology is null and " +
+            "fd.prescription is null and " +
+            "fd.prescription_price is null) " +
+            "order by mf.id;";
+
     @Override
     public List<AdminMedicalFormsDto> getAll() {
         List<AdminMedicalFormsDto> adminMedicalFormsDtoList = new ArrayList<>();
@@ -251,6 +284,42 @@ public class AdminMedicalFormsRepo implements IAdminMedicalFormsRepo{
                 preparedStatement.setString(2,"%"+searchService+"%");
             }else {
                 preparedStatement = connection.prepareStatement(SEARCH_NAME_SERVICE);
+                preparedStatement.setString(1,"Completed");
+                preparedStatement.setString(2,"%"+searchName+"%");
+                preparedStatement.setString(3,"%"+searchService+"%");
+            }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("forms_id");
+                String customerName = resultSet.getString("customer_name");
+                String serviceName = resultSet.getString("service_name");
+                String doctorName = resultSet.getString("doctor_name");
+                String status = resultSet.getString("status");
+                AdminMedicalFormsDto adminMedicalFormsDto = new AdminMedicalFormsDto(id,customerName,serviceName,doctorName,status);
+                adminMedicalFormsDtoList.add(adminMedicalFormsDto);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return adminMedicalFormsDtoList;
+    }
+
+    @Override
+    public List<AdminMedicalFormsDto> searchPayNotYet(String searchName, String searchService) {
+        List<AdminMedicalFormsDto> adminMedicalFormsDtoList = new ArrayList<>();
+        PreparedStatement  preparedStatement = null;
+        try(Connection connection = ConnectDB.getConnectDB()) {
+            if (searchService.equals("")){
+                preparedStatement = connection.prepareStatement(SEARCH_NAME_PAY_NOT_YET);
+                preparedStatement.setString(1,"Completed");
+                preparedStatement.setString(2,"%"+searchName+"%");
+            } else if (searchName.equals("")) {
+                preparedStatement = connection.prepareStatement(SEARCH_SERVICE_PAY_NOT_YET);
+                preparedStatement.setString(1,"Completed");
+                preparedStatement.setString(2,"%"+searchService+"%");
+            }else {
+                preparedStatement = connection.prepareStatement(SEARCH_NAME_SERVICE_PAY_NOT_YET);
                 preparedStatement.setString(1,"Completed");
                 preparedStatement.setString(2,"%"+searchName+"%");
                 preparedStatement.setString(3,"%"+searchService+"%");
