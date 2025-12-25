@@ -3,7 +3,7 @@ package com.example.case_study_hnh.service;
 import com.example.case_study_hnh.entity.MedicalForms;
 import com.example.case_study_hnh.repository.MedicalFormsRepository;
 import com.example.case_study_hnh.repository.IMedicalFormsRepository;
-import com.example.case_study_hnh.dto.MedicalHistoryDto;
+import com.example.case_study_hnh.dto.MedicalFormDto;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class MedicalFormsService implements IMedicalFormsService {
     }
 
     @Override
-    public List<MedicalHistoryDto> findAllHistory() {
+    public List<MedicalFormDto> findAllHistory() {
         return medicalFormsRepository.findAllHistory();
     }
 

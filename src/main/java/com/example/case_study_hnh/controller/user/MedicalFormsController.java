@@ -1,11 +1,8 @@
 package com.example.case_study_hnh.controller.user;
 
-import com.example.case_study_hnh.entity.Customer;
 import com.example.case_study_hnh.entity.MedicalForms;
-import com.example.case_study_hnh.service.CustomerTypeService;
 import com.example.case_study_hnh.service.MedicalFormsService;
 import com.example.case_study_hnh.service.IMedicalFormsService;
-import com.example.case_study_hnh.dto.MedicalHistoryDto;
 import com.example.case_study_hnh.service.IServiceService;
 import com.example.case_study_hnh.service.ServiceService;
 import jakarta.servlet.ServletException;

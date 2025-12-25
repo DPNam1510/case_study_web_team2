@@ -7,16 +7,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Thông tin cá nhân</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <c:import url="/layout/library.jsp"/>
 
     <style>
-        body { background:#f6f7fb; }
-        .page-title { font-weight:800; }
-        .card { border-radius:16px; }
-        .info-label { color:#6c757d; font-size:14px; }
-        .info-value { font-weight:600; font-size:16px; }
+        body {
+            background: #f6f7fb;
+        }
+
+        .page-title {
+            font-weight: 800;
+        }
+
+        .card {
+            border-radius: 16px;
+        }
+
+        .info-label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            font-size: 16px;
+        }
     </style>
 </head>
 
@@ -28,18 +42,23 @@
         <h2 class="page-title mb-0">
             <i class="fa-solid fa-user"></i> Thông tin cá nhân
         </h2>
-
+        <div>
         <a href="<c:url value='/customers?action=update'/>"
            class="btn btn-primary">
             <i class="fa-solid fa-user-pen"></i> Cập nhật
         </a>
+        <a href="<c:url value="/view/customer/home_customer.jsp"/>"
+           class="btn btn-primary">
+            <i class="fa-solid fa-user-pen"></i> Quay lại
+        </a>
+        </div>
     </div>
 
     <!-- Message -->
-    <c:if test="${param.message != null}">
+    <c:if test="${not empty message}">
         <div class="alert alert-success text-center">
             <i class="fa-solid fa-circle-check"></i>
-            Cập nhật thông tin thành công
+                ${message}
         </div>
     </c:if>
     <!-- Info Card -->
@@ -75,11 +94,17 @@
                 <div class="col-md-6">
                     <div class="info-label">Ngày sinh</div>
                     <div class="info-value">
-                        <c:if test="${customer.birthday != null}">
-                            <fmt:formatDate value="${customer.birthday}" pattern="dd/MM/yyyy"/>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${customer.birthday != null}">
+                                ${customer.birthday}
+                            </c:when>
+                            <c:otherwise>
+                                Chưa cập nhật
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
+
 
                 <div class="col-md-6">
                     <div class="info-label">Email</div>
@@ -101,7 +126,5 @@
     </div>
 
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

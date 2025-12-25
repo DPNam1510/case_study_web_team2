@@ -43,7 +43,7 @@
             <li class="dropdown">
                 <a>Tài khoản ▾</a>
                 <ul class="dropdown-menu">
-                    <li><a href="<c:url value="/view/customer/customerList.jsp"/>">Thông tin cá nhân</a></li>
+                    <li><a href="<c:url value="/customers"/> ">Thông tin cá nhân</a></li>
                     <li><a href="<c:url value="/view/home.jsp"/>">Đăng xuất</a></li>
                 </ul>
             </li>
@@ -53,7 +53,7 @@
 <body>
 <section class="hero">
     <div class="hero-content">
-        <h1>Xin chào, ${sessionScope.customer.name}</h1>
+        <h1>Xin chào, ${sessionScope.account.username}</h1>
         <p>Chăm sóc sức khỏe toàn diện cho bạn</p>
         <a href="<c:url value='/medicalForms?action=add'/>" class="btn">
             Đăng ký khám ngay
